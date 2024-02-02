@@ -25,12 +25,13 @@ export const StyledMain = styled.main`
   width: 100%;
 `;
 
+
 function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <StyledLayout>
-          <BrowserRouter>
+    <StyledLayout>
+      <BrowserRouter>
+        <AuthProvider>
+          <CartProvider>
             <Navigation />
             <StyledMain>
               <Routes>
@@ -44,10 +45,10 @@ function App() {
               </Routes>
             </StyledMain>
             <Footer />
-          </BrowserRouter>
-        </StyledLayout>
-      </CartProvider>
-    </AuthProvider>
+          </CartProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </StyledLayout>
   );
 }
 

@@ -1,15 +1,19 @@
-import { useEffect } from "react";
 import { CenteredH1, StyledTable } from "../../components/table/Listing.style";
 import { useCart } from "../../context/CartContext";
 import useProduct from "../../hooks/Product/Product.hook";
+import { Product } from "./Product.static";
 
 const ListProducts = () => {
   const { addItem } = useCart();
-  const { products, getProduct, handleDelete } = useProduct();
+  const { products, isLoading, error, deleteProduct } = useProduct();
 
-  useEffect(() => {
-    getProduct();
-  }, []);
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error fetching products: {error.message}</p>;
+  }
 
   return (
     <div>
@@ -26,13 +30,13 @@ const ListProducts = () => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {products?.map((product: Product) => (
             <tr key={product.id}>
               <td>{product.name}</td>
               <td>{product.type}</td>
               <td>{product.unitType}</td>
-              <td>{product.createdAt}</td>
-              <td>{product.updatedAt}</td>
+              <td>{product.createdAt.toLocaleString()}</td>
+              <td>{product.updatedAt.toLocaleString()}</td>
               <td>
                 <button
                   className="add"
@@ -43,7 +47,9 @@ const ListProducts = () => {
                   Add to cart
                 </button>
                 <button className="update">Edit</button>
-                <button onClick={() => handleDelete(product.id)}>Delete</button>
+                <button onClick={() => deleteProduct(product.id)}>
+                  Delete
+                </button>
               </td>
             </tr>
           ))}

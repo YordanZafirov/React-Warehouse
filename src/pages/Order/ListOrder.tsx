@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 import { CenteredH1, StyledTable } from "../../components/table/Listing.style";
 import Invoice from "../Invoice/Invoice";
 
@@ -8,24 +6,25 @@ import useClient from "../../hooks/Client/Client.hook";
 import useWarehouse from "../../hooks/Warehouse/Warehouse.hook";
 
 const ListOrder = () => {
-  const { orders, fetchOrders, handleDelete } = useOrder();
-  const { clients, getClient } = useClient();
-  const { warehouses, getWarehouse } = useWarehouse();
+  const { orders, isLoading, error, deleteOrder } = useOrder();
+  const { clients } = useClient();
+  const { warehouses } = useWarehouse();
 
-  useEffect(() => {
-    fetchOrders();
-    getClient();
-    getWarehouse();
-    console.log(orders);
-  }, []);
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error fetching orders: {error.message}</p>;
+  }
 
   const getClientName = (clientId: string) => {
-    const client = clients.find((client) => client.id === clientId);
+    const client = clients?.find((client) => client.id === clientId);
     return client ? client.accountablePerson : "Unknown Client";
   };
 
   const getWarehouseName = (warehouseId: string) => {
-    const warehouse = warehouses.find(
+    const warehouse = warehouses?.find(
       (warehouse) => warehouse.id === warehouseId
     );
     return warehouse ? warehouse.name : "Unknown Warehouse";
@@ -45,7 +44,7 @@ const ListOrder = () => {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
+          {orders?.map((order) => (
             <tr key={order.id}>
               <td>{order.id}</td>
               <td>{getClientName(order.clientId)}</td>
@@ -53,7 +52,7 @@ const ListOrder = () => {
               <td>{order.createdAt}</td>
               <td>
                 <button className="update">Invoice</button>
-                <button onClick={() => handleDelete(order.id)}>Delete</button>
+                <button onClick={() => deleteOrder(order.id)}>Delete</button>
               </td>
             </tr>
           ))}

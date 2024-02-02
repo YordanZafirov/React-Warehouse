@@ -3,11 +3,15 @@ import { CenteredH1, StyledTable } from "../../components/table/Listing.style";
 import useWarehouse from "../../hooks/Warehouse/Warehouse.hook";
 
 const ListWarehouse = () => {
-  const { warehouses, getWarehouse, deleteWarehouse } = useWarehouse();
+  const { warehouses, isLoading, error, deleteWarehouse } = useWarehouse();
 
-  useEffect(() => {
-    getWarehouse();
-  }, []);
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error fetching warehouses: {error.message}</p>;
+  }
 
   return (
     <div>
@@ -24,13 +28,13 @@ const ListWarehouse = () => {
           </tr>
         </thead>
         <tbody>
-          {warehouses.map((warehouse) => (
+          {warehouses?.map((warehouse) => (
             <tr key={warehouse.id}>
               <td>{warehouse.name}</td>
               <td>{warehouse.address}</td>
               <td>{warehouse.type}</td>
-              <td>{warehouse.createdAt}</td>
-              <td>{warehouse.updatedAt}</td>
+              <td>{warehouse.createdAt.toLocaleString()}</td>
+              <td>{warehouse.updatedAt.toLocaleString()}</td>
               <td>
                 <button className="update">Edit</button>
                 <button onClick={() => deleteWarehouse(warehouse.id)}>

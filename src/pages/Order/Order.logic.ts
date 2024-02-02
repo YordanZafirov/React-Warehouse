@@ -1,55 +1,67 @@
-import { useState } from "react";
 import { Order } from "./Order.static";
 import { endpoint } from "../../static/endpoints/Endpoint";
-import { token } from "../../static/token";
+import { useMutation, useQuery } from "react-query";
 
 const useOrder = () => {
-  const [orders, setOrders] = useState<Order[]>([]);
+  const {
+    data: orders,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery("orders", getOrder);
+  const deleteOrderMutation = useMutation(deleteOrder);
 
-  const fetchOrders = () => {
-    fetch(endpoint.order, {
+  async function getOrder() {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      throw new Error("Access token not found");
+    }
+    const res = await fetch(endpoint.order, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    })
-      .then((res) => res.json())
-      .then((data: Order[]) => {
-        setOrders(
-          data.map((order) => ({
-            ...order,
-            createdAt: new Date(order.createdAt).toLocaleString(),
-          }))
-        );
-      });
-  };
+    });
+    if (!res.ok) {
+      throw new Error(`Failed to fetch data: ${res.statusText}`);
+    }
 
-  const handleDelete = (id: string) => {
-    fetch(endpoint.order + "/soft-delete/" + id, {
+    const data = await res.json();
+
+    if (!Array.isArray(data)) {
+      throw new Error(`Unexpected data format: ${JSON.stringify(data)}`);
+    }
+
+    return data.map((order: Order) => ({
+      ...order,
+      createdAt: new Date(order.createdAt).toLocaleString(),
+    }));
+  }
+
+  async function deleteOrder(id: string) {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      throw new Error("Access token not found");
+    }
+
+    const res = await fetch(`${endpoint.order}/soft-delete/${id}`, {
       method: "DELETE",
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Failed to delete order. Status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then(() => {
-        setOrders((prevOrder) =>
-        prevOrder.filter((order) => order.id !== id)
-        );
-      })
-      .catch((error) => {
-        console.error("Error deleting order:", error);
-      });
-  };
+    });
 
-  return { orders, fetchOrders, handleDelete };
+    if (!res.ok) {
+      throw new Error(`Failed to delete order: ${res.statusText}`);
+    }
+    refetch();
+  }
+
+  return { orders, isLoading, error, deleteOrder: deleteOrderMutation.mutate };
 };
 
 export default useOrder;

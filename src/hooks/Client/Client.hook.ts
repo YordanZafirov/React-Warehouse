@@ -1,55 +1,72 @@
-import { useState } from "react";
 import { Client } from "../../pages/Client/Client.static";
-import { token } from "../../static/token";
+import { useMutation, useQuery } from "react-query";
 
 const useClient = () => {
-  const [clients, setClients] = useState<Client[]>([]);
+  const {
+    data: clients,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery("clients", getClient);
 
-  const getClient = () => {
-    fetch("http://localhost:3000/client/", {
+  const deleteWarehouseMutation = useMutation(deleteClient);
+
+  async function getClient() {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      throw new Error("Access token not found");
+    }
+    const res = await fetch("http://localhost:3000/client/", {
       method: "GET",
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    })
-      .then((res) => res.json())
-      .then((data: Client[]) => {
-        setClients(
-          data.map((client) => ({
-            ...client,
-            createdAt: new Date(client.createdAt),
-            updatedAt: new Date(client.updatedAt),
-          }))
-        );
-      });
-  };
+    });
+    if (!res.ok) {
+      throw new Error(`Failed to fetch data: ${res.statusText}`);
+    }
 
-  const deleteClient = (id: string) => {
-    fetch(`http://localhost:3000/client/soft-delete/${id}`, {
+    const data = await res.json();
+
+    if (!Array.isArray(data)) {
+      throw new Error(`Unexpected data format: ${JSON.stringify(data)}`);
+    }
+
+    return data.map((client: Client) => ({
+      ...client,
+      createdAt: new Date(client.createdAt),
+      updatedAt: new Date(client.updatedAt),
+    }));
+  }
+  async function deleteClient(id: string) {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      throw new Error("Access token not found");
+    }
+
+    const res = await fetch(`http://localhost:3000/client/soft-delete/${id}`, {
       method: "DELETE",
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`Failed to delete client. Status: ${res.status}`);
-      }
-      return res.json();
-    })
-    .then(() => {
-      setClients((prevClient) =>
-        prevClient.filter((client) => client.id !== id)
-      );
-    })
-    .catch((error) => {
-      console.error("Error deleting client:", error);
     });
-  };
 
-  return { clients, getClient, deleteClient };
+    if (!res.ok) {
+      throw new Error(`Failed to delete client: ${res.statusText}`);
+    }
+    refetch();
+  }
+
+  return {
+    clients,
+    isLoading,
+    error,
+    deleteClient: deleteWarehouseMutation.mutate,
+  };
 };
 
 export default useClient;

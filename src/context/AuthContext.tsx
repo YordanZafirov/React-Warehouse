@@ -1,6 +1,6 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import { Navigate, Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -14,21 +14,22 @@ interface AuthProviderProps {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const isTokenExpired = (exp: any) => {
+  const currentTime = Date.now() / 1000;
+  return exp < currentTime;
+};
+const isTokenValid = (token: string) => {
+  try {
+    const decodedToken = jwtDecode(token);
+
+    return decodedToken && !isTokenExpired(decodedToken.exp);
+  } catch (error) {
+    return false;
+  }
+};
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const isTokenExpired = (exp: any) => {
-    const currentTime = Date.now() / 1000;
-    return exp < currentTime;
-  };
-  const isTokenValid = (token: string) => {
-    try {
-      const decodedToken = jwtDecode(token);
-
-      return decodedToken && !isTokenExpired(decodedToken.exp);
-    } catch (error) {
-      return false;
-    }
-  };
-
+  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     const storedToken = localStorage.getItem("accessToken");
     return !!storedToken && isTokenValid(storedToken);
@@ -39,18 +40,27 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     if (!isValidToken) {
       localStorage.removeItem("accessToken");
-      return <Navigate to="/login" />;
+      navigate("/login");
     }
 
     setIsAuthenticated(true);
-    return <Outlet />;
   };
 
   const logout = () => {
     localStorage.removeItem("accessToken");
-    sessionStorage.removeItem("cartItems")
+    sessionStorage.removeItem("cartItems");
     setIsAuthenticated(false);
   };
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("accessToken");
+    if (storedToken && isTokenValid(storedToken)) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+      navigate("/login");
+    }
+  }, []);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>

@@ -1,13 +1,17 @@
-import { useEffect } from "react";
 import { StyledTable, CenteredH1 } from "../../components/table/Listing.style";
 import useClient from "../../hooks/Client/Client.hook";
+import { Client } from "./Client.static";
 
 const ListClients = () => {
-  const { clients, getClient, deleteClient } = useClient();
+  const { clients, isLoading, error, deleteClient } = useClient();
 
-  useEffect(() => {
-    getClient();
-  }, []);
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error fetching clients: {error.message}</p>;
+  }
 
   return (
     <div>
@@ -25,7 +29,7 @@ const ListClients = () => {
           </tr>
         </thead>
         <tbody>
-          {clients.map((client) => (
+          {clients?.map((client: Client) => (
             <tr key={client.id}>
               <td>{client.accountablePerson}</td>
               <td>{client.userName}</td>

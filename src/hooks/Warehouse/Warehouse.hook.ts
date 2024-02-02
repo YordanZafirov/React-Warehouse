@@ -1,60 +1,75 @@
-import { useState } from "react";
-import { Warehouse } from "../../pages/Warehouse/Warehouse.static";
+import { useMutation, useQuery } from "react-query";
 import { endpoint } from "../../static/endpoints/Endpoint";
-import { token } from "../../static/token";
+import { Warehouse } from "../../pages/Warehouse/Warehouse.static";
 
 const useWarehouse = () => {
-  const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
+  const {
+    data: warehouses,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery("warehouses", getWarehouse);
 
-  const getWarehouse = () => {
-    fetch(endpoint.warehouse, {
+  const deleteWarehouseMutation = useMutation(deleteWarehouse);
+
+  async function getWarehouse() {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      throw new Error("Access token not found");
+    }
+    const res = await fetch(endpoint.warehouse, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    })
-      .then((res) => res.json())
-      .then((data: Warehouse[]) => {
-        setWarehouses(
-          data.map((warehouse) => ({
-            ...warehouse,
-            createdAt: new Date(warehouse.createdAt).toLocaleString(),
-            updatedAt: new Date(warehouse.updatedAt).toLocaleString(),
-          }))
-        );
-        return data;
-      })
-      .catch((error) => {
-        console.error("Error fetching warehouse:", error);
-      });
-  };
+    });
+    if (!res.ok) {
+      throw new Error(`Failed to fetch data: ${res.statusText}`);
+    }
 
-  const deleteWarehouse = (id: string) => {
-    fetch(`${endpoint.warehouse}/soft-delete/${id}`, {
+    const data = await res.json();
+
+    if (!Array.isArray(data)) {
+      throw new Error(`Unexpected data format: ${JSON.stringify(data)}`);
+    }
+
+    return data.map((warehouse: Warehouse) => ({
+      ...warehouse,
+      createdAt: new Date(warehouse.createdAt),
+      updatedAt: new Date(warehouse.updatedAt),
+    }));
+  }
+
+  async function deleteWarehouse(id: string) {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      throw new Error("Access token not found");
+    }
+
+    const res = await fetch(`${endpoint.warehouse}/soft-delete/${id}`, {
       method: "DELETE",
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Failed to delete warehouse. Status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then(() => {
-        setWarehouses((prevWarehouses) =>
-          prevWarehouses.filter((warehouse) => warehouse.id !== id)
-        );
-      })
-      .catch((error) => {
-        console.error("Error deleting warehouse:", error);
-      });
-  };
+    });
 
-  return { warehouses, getWarehouse, deleteWarehouse };
+    if (!res.ok) {
+      throw new Error(`Failed to delete warehouse: ${res.statusText}`);
+    }
+
+    refetch();
+  }
+
+  return {
+    warehouses,
+    isLoading,
+    error,
+    deleteWarehouse: deleteWarehouseMutation.mutate,
+  };
 };
 
 export default useWarehouse;
