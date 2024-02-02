@@ -1,14 +1,8 @@
-import { useEffect } from "react";
 import { CenteredH1, StyledTable } from "../../components/table/Listing.style";
 import useWarehouse from "../../hooks/Warehouse/Warehouse.hook";
 
 const ListWarehouse = () => {
-  const { warehouses, isLoading, error, deleteWarehouse } = useWarehouse();
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
+  const { warehouses, error, deleteWarehouse } = useWarehouse();
   if (error) {
     return <p>Error fetching warehouses: {error.message}</p>;
   }

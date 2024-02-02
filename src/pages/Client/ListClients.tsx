@@ -1,13 +1,10 @@
+import Loader from "../../components/loader/Loader";
 import { StyledTable, CenteredH1 } from "../../components/table/Listing.style";
 import useClient from "../../hooks/Client/Client.hook";
 import { Client } from "./Client.static";
 
 const ListClients = () => {
-  const { clients, isLoading, error, deleteClient } = useClient();
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  const { clients, error, deleteClient } = useClient();
 
   if (error) {
     return <p>Error fetching clients: {error.message}</p>;

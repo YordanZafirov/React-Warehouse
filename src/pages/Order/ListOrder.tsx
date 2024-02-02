@@ -10,10 +10,6 @@ const ListOrder = () => {
   const { clients } = useClient();
   const { warehouses } = useWarehouse();
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
   if (error) {
     return <p>Error fetching orders: {error.message}</p>;
   }

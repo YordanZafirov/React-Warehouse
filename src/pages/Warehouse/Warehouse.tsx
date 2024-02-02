@@ -1,11 +1,17 @@
 import WarehouseForm from "./WarehouseForm";
 import ListWarehouse from "./ListWarehouse";
 import { useState } from "react";
-// import { PageContainer } from "../../common/Page.style";
 import Button, { ButtonDiv } from "../../components/common/Button";
+import useWarehouse from "../../hooks/Warehouse/Warehouse.hook";
+import Loader from "../../components/loader/Loader";
 
 const Warehouse = () => {
   const [toggle, setToggle] = useState(false);
+  const {isLoading} = useWarehouse();
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   const handleToggle = () => {
     setToggle((prev) => !prev);

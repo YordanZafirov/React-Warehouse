@@ -5,11 +5,7 @@ import { Product } from "./Product.static";
 
 const ListProducts = () => {
   const { addItem } = useCart();
-  const { products, isLoading, error, deleteProduct } = useProduct();
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  const { products, error, deleteProduct } = useProduct();
 
   if (error) {
     return <p>Error fetching products: {error.message}</p>;
