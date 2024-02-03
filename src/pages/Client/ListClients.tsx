@@ -1,10 +1,11 @@
-import Loader from "../../components/loader/Loader";
 import { StyledTable, CenteredH1 } from "../../components/table/Listing.style";
 import useClient from "../../hooks/Client/Client.hook";
+import useToken from "../../hooks/Token/Token.hook";
 import { Client } from "./Client.static";
 
 const ListClients = () => {
   const { clients, error, deleteClient } = useClient();
+  const decodedToken = useToken();
 
   if (error) {
     return <p>Error fetching clients: {error.message}</p>;
@@ -22,7 +23,7 @@ const ListClients = () => {
             <th>Address</th>
             <th>Created At</th>
             <th>Updated At</th>
-            <th>Actions</th>
+            {decodedToken?.role !== "VIEWER" && <th>Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -34,10 +35,14 @@ const ListClients = () => {
               <td>{client.address}</td>
               <td>{client.createdAt.toLocaleString()}</td>
               <td>{client.updatedAt.toLocaleString()}</td>
-              <td>
-                <button className="update">Edit</button>
-                <button onClick={() => deleteClient(client.id)}>Delete</button>
-              </td>
+              {decodedToken?.role !== "VIEWER" && (
+                <td>
+                  <button className="update">Edit</button>
+                  <button onClick={() => deleteClient(client.id)}>
+                    Delete
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

@@ -50,6 +50,23 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formValues.email)) {
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        errMessage: "Invalid email format",
+      }));
+      return;
+    }
+
+    if (formValues.password.length < 5) {
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        errMessage: "Password must be at least 6 characters long",
+      }));
+      return;
+    }
+
     // Validate form values or perform any additional checks before submitting
     if (
       formType === "register" &&

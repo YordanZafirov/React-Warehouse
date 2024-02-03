@@ -4,10 +4,17 @@ import { useState } from "react";
 import Button, { ButtonDiv } from "../../components/common/Button";
 import useWarehouse from "../../hooks/Warehouse/Warehouse.hook";
 import Loader from "../../components/loader/Loader";
+import useToken from "../../hooks/Token/Token.hook";
 
 const Warehouse = () => {
+  const { isLoading } = useWarehouse();
   const [toggle, setToggle] = useState(false);
-  const {isLoading} = useWarehouse();
+
+  const decodedToken = useToken();
+
+  if (decodedToken === null) {
+    return <Loader />;
+  }
 
   if (isLoading) {
     return <Loader />;
@@ -18,13 +25,19 @@ const Warehouse = () => {
   };
   return (
     <div>
-      <ButtonDiv>
-        <Button color={toggle ? "blue" : "yellow"} onClick={handleToggle}>
-          {toggle ? "List Warehouses" : "Add Warehouse"}
-        </Button>
-      </ButtonDiv>
+      {decodedToken?.role === "VIEWER" ? (
+        <ListWarehouse />
+      ) : (
+        <div>
+          <ButtonDiv>
+            <Button color={toggle ? "blue" : "yellow"} onClick={handleToggle}>
+              {toggle ? "List Warehouses" : "Add Warehouse"}
+            </Button>
+          </ButtonDiv>
 
-      {toggle ? <WarehouseForm /> : <ListWarehouse />}
+          {toggle ? <WarehouseForm /> : <ListWarehouse />}
+        </div>
+      )}
     </div>
   );
 };

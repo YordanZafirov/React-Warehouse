@@ -4,18 +4,21 @@ import Invoice from "../Invoice/Invoice";
 import useOrder from "./Order.logic";
 import useClient from "../../hooks/Client/Client.hook";
 import useWarehouse from "../../hooks/Warehouse/Warehouse.hook";
+import useToken from "../../hooks/Token/Token.hook";
+import { Client } from "../Client/Client.static";
 
 const ListOrder = () => {
-  const { orders, isLoading, error, deleteOrder } = useOrder();
+  const { orders, error, deleteOrder } = useOrder();
   const { clients } = useClient();
   const { warehouses } = useWarehouse();
+  const decodedToken = useToken();
 
   if (error) {
     return <p>Error fetching orders: {error.message}</p>;
   }
 
   const getClientName = (clientId: string) => {
-    const client = clients?.find((client) => client.id === clientId);
+    const client = clients?.find((client: Client) => client.id === clientId);
     return client ? client.accountablePerson : "Unknown Client";
   };
 
@@ -36,7 +39,7 @@ const ListOrder = () => {
             <th>Client</th>
             <th>Warehouse</th>
             <th>CreatedAt</th>
-            <th>Actions</th>
+            {decodedToken?.role !== "VIEWER" && <th>Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -46,10 +49,12 @@ const ListOrder = () => {
               <td>{getClientName(order.clientId)}</td>
               <td>{getWarehouseName(order.warehouseId)}</td>
               <td>{order.createdAt}</td>
-              <td>
-                <button className="update">Invoice</button>
-                <button onClick={() => deleteOrder(order.id)}>Delete</button>
-              </td>
+              {decodedToken?.role !== "VIEWER" && (
+                <td>
+                  <button className="update">Invoice</button>
+                  <button onClick={() => deleteOrder(order.id)}>Delete</button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

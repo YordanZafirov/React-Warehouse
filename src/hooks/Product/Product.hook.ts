@@ -13,57 +13,71 @@ const useProduct = () => {
   const deleteProductMutation = useMutation(deleteProduct);
 
   async function getProduct() {
-    const token = localStorage.getItem("accessToken");
+    try {
+      const token = localStorage.getItem("accessToken");
 
-    if (!token) {
-      throw new Error("Access token not found");
+      if (!token) {
+        throw new Error("Access token not found");
+      }
+      const res = await fetch(endpoint.product, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) {
+        throw new Error(`Failed to fetch data: ${res.statusText}`);
+      }
+
+      const data = await res.json();
+
+      if (!Array.isArray(data)) {
+        throw new Error(`Unexpected data format: ${JSON.stringify(data)}`);
+      }
+
+      return data.map((product: Product) => ({
+        ...product,
+        createdAt: new Date(product.createdAt),
+        updatedAt: new Date(product.updatedAt),
+      }));
+    } catch (error) {
+      console.error(error);
     }
-    const res = await fetch(endpoint.product, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (!res.ok) {
-      throw new Error(`Failed to fetch data: ${res.statusText}`);
-    }
-
-    const data = await res.json();
-
-    if (!Array.isArray(data)) {
-      throw new Error(`Unexpected data format: ${JSON.stringify(data)}`);
-    }
-
-    return data.map((product: Product) => ({
-      ...product,
-      createdAt: new Date(product.createdAt),
-      updatedAt: new Date(product.updatedAt),
-    }));
   }
 
   async function deleteProduct(id: string) {
-    const token = localStorage.getItem("accessToken");
+    try {
+      const token = localStorage.getItem("accessToken");
 
-    if (!token) {
-      throw new Error("Access token not found");
+      if (!token) {
+        throw new Error("Access token not found");
+      }
+
+      const res = await fetch(`${endpoint.product}/soft-delete/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error(`Failed to delete product: ${res.statusText}`);
+      }
+
+      refetch();
+    } catch (error) {
+      console.error(error);
     }
-
-    const res = await fetch(`${endpoint.product}/soft-delete/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!res.ok) {
-      throw new Error(`Failed to delete product: ${res.statusText}`);
-    }
-
-    refetch();
   }
-  return { products, isLoading, error, deleteProduct: deleteProductMutation.mutate};
+  
+  return {
+    products,
+    isLoading,
+    error,
+    deleteProduct: deleteProductMutation.mutate,
+  };
 };
 
 export default useProduct;

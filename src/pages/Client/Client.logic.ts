@@ -38,8 +38,33 @@ const useClientForm = () => {
     });
   };
 
+  const validateForm = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (
+      !client.accountablePerson ||
+      !client.userName ||
+      !client.email ||
+      !client.address
+    ) {
+      setClient((prevValues) => ({
+        ...prevValues,
+        errMsg: "All fields are required",
+      }));
+      return false;
+    }
+    if (!emailRegex.test(client.email)) {
+      setClient((prevValues) => ({
+        ...prevValues,
+        errMsg: "Invalid email",
+      }));
+      return false;
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!validateForm()) return;
 
     const data = {
       accountablePerson: client.accountablePerson,
@@ -66,7 +91,6 @@ const useClientForm = () => {
         return res.json();
       })
       .then((data) => {
-
         if (data && data.error) {
           // Handle 403 Forbidden error with specific error message
           setClient((prevValues) => ({
@@ -91,9 +115,7 @@ const useClientForm = () => {
         }));
       });
   };
-  return ( 
-    { client, handleChange, handleSubmit }
-   );
-}
- 
+  return { client, handleChange, handleSubmit };
+};
+
 export default useClientForm;

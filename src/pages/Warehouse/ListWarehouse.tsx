@@ -1,8 +1,10 @@
 import { CenteredH1, StyledTable } from "../../components/table/Listing.style";
+import useToken from "../../hooks/Token/Token.hook";
 import useWarehouse from "../../hooks/Warehouse/Warehouse.hook";
 
 const ListWarehouse = () => {
   const { warehouses, error, deleteWarehouse } = useWarehouse();
+  const decodedToken = useToken();
   if (error) {
     return <p>Error fetching warehouses: {error.message}</p>;
   }
@@ -18,7 +20,7 @@ const ListWarehouse = () => {
             <th>Type</th>
             <th>Created at</th>
             <th>Updated at</th>
-            <th>Actions</th>
+            {decodedToken?.role !== "VIEWER" && <th>Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -29,12 +31,14 @@ const ListWarehouse = () => {
               <td>{warehouse.type}</td>
               <td>{warehouse.createdAt.toLocaleString()}</td>
               <td>{warehouse.updatedAt.toLocaleString()}</td>
-              <td>
-                <button className="update">Edit</button>
-                <button onClick={() => deleteWarehouse(warehouse.id)}>
-                  Delete
-                </button>
-              </td>
+              {decodedToken?.role !== "VIEWER" && (
+                <td>
+                  <button className="update">Edit</button>
+                  <button onClick={() => deleteWarehouse(warehouse.id)}>
+                    Delete
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

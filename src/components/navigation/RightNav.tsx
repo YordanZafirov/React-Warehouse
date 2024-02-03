@@ -15,6 +15,8 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import CartIcon from "../../pages/Cart/CartIcon";
 import CartModal, { ModalInstance } from "../../pages/Cart/CartModal";
+import { JwtPayload } from "jsonwebtoken";
+import useToken from "../../hooks/Token/Token.hook";
 
 interface NavProps {
   open: boolean;
@@ -26,17 +28,8 @@ const StyledProfile = styled.div`
 
 const RightNav: React.FC<NavProps> = ({ open }) => {
   const { isAuthenticated, logout } = useAuth();
-  const validToken = localStorage.getItem("accessToken");
   const [showPopover, setShowPopover] = useState(false);
-  const [decodedToken, setDecodedToken] = useState<any | null>(null);
-
-  useEffect(() => {
-    if (validToken) {
-      // Decode the token and set the decoded information
-      const decoded = jwtDecode(validToken);
-      setDecodedToken(decoded);
-    }
-  }, [validToken]);
+  const decodedToken = useToken();
 
   const handleProfileClick = () => {
     setShowPopover(!showPopover);
@@ -59,9 +52,12 @@ const RightNav: React.FC<NavProps> = ({ open }) => {
       <Ul open={open}>
         {isAuthenticated ? (
           <>
-            {" "}
-            <CartIcon onClick={openCartModal} />
-            <CartModal ref={cartModalRef} />
+            {decodedToken && decodedToken?.role !== "VIEWER" && (
+              <>
+                <CartIcon onClick={openCartModal} />
+                <CartModal ref={cartModalRef} />
+              </>
+            )}
             <NavLink to={route.client}>
               <li>Clients</li>
             </NavLink>

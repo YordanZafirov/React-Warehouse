@@ -57,10 +57,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (storedToken && isTokenValid(storedToken)) {
       setIsAuthenticated(true);
     } else {
+      localStorage.removeItem("accessToken");
       setIsAuthenticated(false);
       navigate("/login");
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
