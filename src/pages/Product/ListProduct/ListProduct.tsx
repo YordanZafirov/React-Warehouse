@@ -1,12 +1,17 @@
-import { CenteredH1, StyledTable } from "../../components/table/Listing.style";
-import { useCart } from "../../context/CartContext";
-import useProduct from "../../hooks/Product/Product.hook";
-import useToken from "../../hooks/Token/Token.hook";
+import {
+  CenteredH1,
+  StyledTable,
+} from "../../../components/table/Listing.style";
+import { useCart } from "../../../context/CartContext";
+import useToken from "../../../hooks/Token/Token.hook";
 import { Product } from "./Product.static";
+import useDeleteProduct from "./ListProduct.logic";
+import useGetProduct from "../../../hooks/Product/Product.hook";
 
 const ListProducts = () => {
   const { addItem } = useCart();
-  const { products, error, deleteProduct } = useProduct();
+  const { products, error } = useGetProduct();
+  const { deleteProduct } = useDeleteProduct();
   const decodedToken = useToken();
 
   if (error) {

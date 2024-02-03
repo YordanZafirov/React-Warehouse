@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import ListProducts from "./ListProduct";
-import ProductForm from "./ProductForm";
-import Button, { ButtonDiv } from "../../components/common/Button";
+import ListProducts from "./ListProduct/ListProduct";
+import ProductForm from "./ProductForm/ProductForm";
+import Button, { ButtonDiv } from "../../components/button/Button";
 import useProduct from "../../hooks/Product/Product.hook";
 import Loader from "../../components/loader/Loader";
 import useToken from "../../hooks/Token/Token.hook";

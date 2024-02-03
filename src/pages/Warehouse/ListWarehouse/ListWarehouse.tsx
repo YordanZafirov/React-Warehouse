@@ -1,9 +1,16 @@
-import { CenteredH1, StyledTable } from "../../components/table/Listing.style";
-import useToken from "../../hooks/Token/Token.hook";
-import useWarehouse from "../../hooks/Warehouse/Warehouse.hook";
+import {
+  CenteredH1,
+  StyledTable,
+} from "../../../components/table/Listing.style";
+import useToken from "../../../hooks/Token/Token.hook";
+import useGetWarehouse from "../../../hooks/Warehouse/Warehouse.hook";
+import useDeleteWarehouse from "./ListWarehouse.logic";
 
 const ListWarehouse = () => {
-  const { warehouses, error, deleteWarehouse } = useWarehouse();
+  const { warehouses, error } = useGetWarehouse();
+
+  const { deleteWarehouse } = useDeleteWarehouse();
+
   const decodedToken = useToken();
   if (error) {
     return <p>Error fetching warehouses: {error.message}</p>;

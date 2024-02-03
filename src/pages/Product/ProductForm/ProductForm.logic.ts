@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { endpoint } from "../../static/endpoints/Endpoint";
-import { token } from "../../static/token";
+import { endpoint } from "../../../static/endpoints/Endpoint";
+import { token } from "../../../static/token";
 
 const useProductForm = () => {
   const [product, setProduct] = useState({

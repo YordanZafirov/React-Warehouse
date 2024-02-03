@@ -2,15 +2,15 @@ import { CenteredH1, StyledTable } from "../../components/table/Listing.style";
 import Invoice from "../Invoice/Invoice";
 
 import useOrder from "./Order.logic";
-import useClient from "../../hooks/Client/Client.hook";
-import useWarehouse from "../../hooks/Warehouse/Warehouse.hook";
 import useToken from "../../hooks/Token/Token.hook";
-import { Client } from "../Client/Client.static";
+import { Client } from "../Client/ListClients/Client.static";
+import useGetClient from "../../hooks/Client/Client.hook";
+import useGetWarehouse from "../../hooks/Warehouse/Warehouse.hook";
 
 const ListOrder = () => {
   const { orders, error, deleteOrder } = useOrder();
-  const { clients } = useClient();
-  const { warehouses } = useWarehouse();
+  const { clients } = useGetClient();
+  const { warehouses } = useGetWarehouse();
   const decodedToken = useToken();
 
   if (error) {

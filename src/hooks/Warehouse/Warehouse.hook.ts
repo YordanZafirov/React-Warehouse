@@ -1,16 +1,14 @@
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { endpoint } from "../../static/endpoints/Endpoint";
 import { Warehouse } from "../../pages/Warehouse/Warehouse.static";
 
-const useWarehouse = () => {
+const useGetWarehouse = () => {
   const {
     data: warehouses,
     isLoading,
     error,
     refetch,
   } = useQuery("warehouses", getWarehouse);
-
-  const deleteWarehouseMutation = useMutation(deleteWarehouse);
 
   async function getWarehouse() {
     try {
@@ -46,38 +44,12 @@ const useWarehouse = () => {
     }
   }
 
-  async function deleteWarehouse(id: string) {
-    try {
-      const token = localStorage.getItem("accessToken");
-
-      if (!token) {
-        throw new Error("Access token not found");
-      }
-
-      const res = await fetch(`${endpoint.warehouse}/soft-delete/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!res.ok) {
-        throw new Error(`Failed to delete warehouse: ${res.statusText}`);
-      }
-
-      refetch();
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   return {
     warehouses,
     isLoading,
     error,
-    deleteWarehouse: deleteWarehouseMutation.mutate,
+    refetch,
   };
 };
 
-export default useWarehouse;
+export default useGetWarehouse;

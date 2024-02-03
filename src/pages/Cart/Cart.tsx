@@ -9,15 +9,9 @@ import {
   RemoveButton,
 } from "./Cart.style";
 import { endpoint } from "../../static/endpoints/Endpoint";
-import { Client } from "../Client/Client.static";
-
-
-
-interface Warehouse {
-  id: string;
-  name: string;
-  type: "solid" | "liquid";
-}
+import { Client } from "../Client/ListClients/Client.static";
+import useGetClient from "../../hooks/Client/Client.hook";
+import useGetWarehouse from "../../hooks/Warehouse/Warehouse.hook";
 
 interface Product {
   id: string;
@@ -50,37 +44,12 @@ const Cart: React.FC = () => {
     success: false,
   });
 
-  const [clients, setClients] = useState<Client[]>([]);
-  const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
 
+  const { clients } = useGetClient();
+  const { warehouses } = useGetWarehouse();
+
   const token = localStorage.getItem("accessToken");
-
-  const fetchClients = () => {
-    fetch(endpoint.client, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setClients(data);
-      });
-  };
-
-  const fetchWarehouses = () => {
-    fetch(endpoint.warehouse, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setWarehouses(data));
-  };
 
   const fetchProducts = async () => {
     const productDetailsPromises = items.map(async (item) => {
@@ -106,12 +75,6 @@ const Cart: React.FC = () => {
     const productDetails = await Promise.all(productDetailsPromises);
     setProducts(productDetails);
   };
-
-  useEffect(() => {
-    fetchClients();
-    fetchWarehouses();
-    fetchProducts();
-  }, [items]);
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -142,6 +105,10 @@ const Cart: React.FC = () => {
       return updatedProducts;
     });
   };
+
+  useEffect(()=> {
+    fetchProducts()
+  }, [items])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -222,7 +189,7 @@ const Cart: React.FC = () => {
             onChange={handleChange}
           >
             {clients ? (
-              clients.map((client) => (
+              clients.map((client: Client) => (
                 <option key={client.id} value={client.id}>
                   {client.accountablePerson}
                 </option>
@@ -240,7 +207,7 @@ const Cart: React.FC = () => {
             value={order.warehouseId}
             onChange={handleChange}
           >
-            {warehouses.map((warehouse) => (
+            {warehouses?.map((warehouse) => (
               <option key={warehouse.id} value={warehouse.id}>
                 {`${warehouse.name}`}
               </option>
@@ -255,7 +222,7 @@ const Cart: React.FC = () => {
             onChange={handleChange}
           >
             <option value="">Select Outgoing Warehouse</option>
-            {warehouses.map((warehouse) => (
+            {warehouses?.map((warehouse) => (
               <option key={warehouse.id} value={warehouse.id}>
                 {warehouse.name}
               </option>

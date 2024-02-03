@@ -1,7 +1,7 @@
-import Button from "../../components/common/Button";
-import Form from "../../components/common/Form";
-import { Alert, Success } from "../../components/common/Alert.style";
-import useProductForm from "./Product.logic";
+import Button from "../../../components/button/Button";
+import Form from "../../../components/form/Form";
+import { Alert, Success } from "../../../components/alert/Alert.style";
+import useProductForm from "./ProductForm.logic";
 
 const ProductForm = () => {
   const { product, handleChange, handleSubmit } = useProductForm();

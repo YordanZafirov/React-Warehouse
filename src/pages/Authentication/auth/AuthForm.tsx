@@ -1,10 +1,15 @@
 import { ChangeEvent, FormEvent, useState, useRef, useEffect } from "react";
-import { Alert, StyledAuth, Success } from "../common/Alert.style";
-import Form from "../common/Form";
-import Button from "../common/Button";
+import {
+  Alert,
+  StyledAuth,
+  Success,
+} from "../../../components/alert/Alert.style";
+import Form from "../../../components/form/Form";
+import Button from "../../../components/button/Button";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import { endpoint } from "../../static/endpoints/Endpoint";
+import { useAuth } from "../../../context/AuthContext";
+import { route } from "../../../static/router/Routes";
+import { endpoint } from "../../../static/endpoints/Endpoint";
 
 interface AuthProps {
   formType: "register" | "login";
@@ -47,9 +52,7 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
     }));
   }, [formValues.email, formValues.password, formValues.confirmPassword]);
 
-  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const validateForm = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formValues.email)) {
       setFormValues((prevValues) => ({
@@ -67,7 +70,6 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
       return;
     }
 
-    // Validate form values or perform any additional checks before submitting
     if (
       formType === "register" &&
       formValues.password !== formValues.confirmPassword
@@ -78,6 +80,12 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
       }));
       return;
     }
+  };
+
+  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    //  validateForm();
 
     const data = {
       email: formValues.email,
@@ -118,6 +126,13 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
           success: true,
         }));
         login(localStorage.getItem("accessToken") || "");
+
+        setTimeout(() => {
+          setFormValues((prevValues) => ({
+            ...prevValues,
+            success: false,
+          }));
+        }, 3000);
       })
       .catch((error) => {
         console.error("Fetch error:", error);
@@ -136,8 +151,8 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
             You {formType === "login" ? "Logged in" : "Registered"} successfully
           </h1>
           <p>
-            <a href={formType === "register" ? "/login" : "#"}>
-              {formType === "login" ? <Navigate to="/" /> : "Login"}
+            <a href={formType === "register" ? route.login : "#"}>
+              {formType === "login" ? <Navigate to={route.client} /> : "Login"}
             </a>
           </p>
         </Success>
@@ -228,7 +243,7 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
               {formType === "login"
                 ? "Don't have an account?"
                 : "Already have an account?"}
-              <a href={formType === "login" ? "/register" : "/login"}>
+              <a href={formType === "login" ? route.register : route.login}>
                 {formType === "login" ? "Register" : "Login"}
               </a>
             </p>

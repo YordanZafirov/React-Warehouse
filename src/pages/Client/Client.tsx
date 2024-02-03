@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import ClientForm from "./ClientForm";
-import ListClients from "./ListClients";
-import Button, { ButtonDiv } from "../../components/common/Button";
+import ClientForm from "./ClientForm/ClientForm";
+import ListClients from "./ListClients/ListClients";
+import Button, { ButtonDiv } from "../../components/button/Button";
 import useClient from "../../hooks/Client/Client.hook";
 import Loader from "../../components/loader/Loader";
 import useToken from "../../hooks/Token/Token.hook";
@@ -11,8 +11,6 @@ const Client = () => {
   const { isLoading } = useClient();
   const [toggle, setToggle] = useState(false);
   const decodedToken = useToken();
-  console.log(isLoading);
-  
 
   if (decodedToken === null) {
     return <Loader />;

@@ -1,7 +1,7 @@
-import Button from "../../components/common/Button";
-import Form from "../../components/common/Form";
-import { Alert, Success } from "../../components/common/Alert.style";
-import useClientForm from "./Client.logic";
+import Button from "../../../components/button/Button";
+import Form from "../../../components/form/Form";
+import { Alert, Success } from "../../../components/alert/Alert.style";
+import useClientForm from "./ClientForm.logic";
 
 const ClientForm = () => {
   const { client, handleChange, handleSubmit } = useClientForm();
@@ -18,7 +18,7 @@ const ClientForm = () => {
           </Alert>
         )}
 
-        <Form title="Clients Page" onSubmit={handleSubmit}>
+        <Form title="Create a client" onSubmit={handleSubmit}>
           <label htmlFor="accountable-person">Accountable Person</label>
           <input
             type="text"

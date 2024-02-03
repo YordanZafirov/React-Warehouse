@@ -34,6 +34,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const storedToken = localStorage.getItem("accessToken");
     return !!storedToken && isTokenValid(storedToken);
   });
+  const currentPath = window.location.pathname;
+
+  const publicRoutes = ["/login", "/register"];
 
   const login = (accessToken: string) => {
     const isValidToken = accessToken && isTokenValid(accessToken);
@@ -54,14 +57,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("accessToken");
+
     if (storedToken && isTokenValid(storedToken)) {
       setIsAuthenticated(true);
     } else {
       localStorage.removeItem("accessToken");
+      sessionStorage.removeItem("cartItems");
       setIsAuthenticated(false);
-      navigate("/login");
+
+      if (!publicRoutes.includes(currentPath)) {
+        navigate("/login");
+      }
     }
-  }, [navigate]);
+  }, [navigate, currentPath, publicRoutes]);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>

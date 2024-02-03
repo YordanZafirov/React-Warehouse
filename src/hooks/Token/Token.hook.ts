@@ -15,13 +15,10 @@ const useToken = () => {
   );
 
   if (status === "loading") {
-    // Loading state: You can return a loading indicator or null
     return null;
   }
 
   if (status === "error" || !validToken) {
-    // Error state: Return null instead of throwing an error
-    // console.error("Token not available");
     return null;
   }
 

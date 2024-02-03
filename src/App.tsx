@@ -3,8 +3,8 @@ import Navigation from "./components/navigation/Navigation";
 import styled from "styled-components";
 
 import Footer from "./components/footer/Footer";
-import Register from "./pages/Register/Register";
-import Login from "./pages/Login/Login";
+import Register from "./pages/Authentication/Register/Register";
+import Login from "./pages/Authentication/Login/Login";
 import Client from "./pages/Client/Client";
 import Warehouse from "./pages/Warehouse/Warehouse";
 import Order from "./pages/Order/Order";

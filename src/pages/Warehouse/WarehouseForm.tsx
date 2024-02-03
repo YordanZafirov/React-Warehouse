@@ -1,6 +1,6 @@
-import Form from "../../components/common/Form";
-import Button from "../../components/common/Button";
-import { Alert, Success } from "../../components/common/Alert.style";
+import Form from "../../components/form/Form";
+import Button from "../../components/button/Button";
+import { Alert, Success } from "../../components/alert/Alert.style";
 import useWarehouseForm from "./Warehouse.logic";
 
 const WarehouseForm = () => {

@@ -1,16 +1,14 @@
-import { Product } from "../../pages/Product/Product.static";
+import { Product } from "../../pages/Product/ListProduct/Product.static";
 import { endpoint } from "../../static/endpoints/Endpoint";
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
 
-const useProduct = () => {
+const useGetProduct = () => {
   const {
     data: products,
     isLoading,
     error,
     refetch,
   } = useQuery("products", getProduct);
-
-  const deleteProductMutation = useMutation(deleteProduct);
 
   async function getProduct() {
     try {
@@ -46,38 +44,12 @@ const useProduct = () => {
     }
   }
 
-  async function deleteProduct(id: string) {
-    try {
-      const token = localStorage.getItem("accessToken");
-
-      if (!token) {
-        throw new Error("Access token not found");
-      }
-
-      const res = await fetch(`${endpoint.product}/soft-delete/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!res.ok) {
-        throw new Error(`Failed to delete product: ${res.statusText}`);
-      }
-
-      refetch();
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  
   return {
     products,
     isLoading,
     error,
-    deleteProduct: deleteProductMutation.mutate,
+    refetch,
   };
 };
 
-export default useProduct;
+export default useGetProduct;

@@ -6,7 +6,7 @@ const NotFound = () => {
     <NotFoundContainer>
       <h1>Page not found!</h1>
       <p>Sorry, but the page you were trying to view does not exist.</p>
-      <Link to="/">Go Home</Link>
+      <Link to="/">Go To Client's Page</Link>
     </NotFoundContainer>
   );
 };

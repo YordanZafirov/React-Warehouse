@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { endpoint } from "../../static/endpoints/Endpoint";
-import { token } from "../../static/token";
+import { endpoint } from "../../../static/endpoints/Endpoint";
+import { token } from "../../../static/token";
 
 const useClientForm = () => {
   const [client, setClient] = useState({
@@ -38,7 +38,7 @@ const useClientForm = () => {
     });
   };
 
-  const validateForm = () => {
+  const validateForm = (): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (
       !client.accountablePerson ||
@@ -51,13 +51,14 @@ const useClientForm = () => {
         errMsg: "All fields are required",
       }));
       return false;
-    }
-    if (!emailRegex.test(client.email)) {
+    } else if (!emailRegex.test(client.email)) {
       setClient((prevValues) => ({
         ...prevValues,
-        errMsg: "Invalid email",
+        errMsg: "Invalid email address",
       }));
       return false;
+    } else {
+      return true;
     }
   };
 
@@ -72,6 +73,8 @@ const useClientForm = () => {
       email: client.email,
       address: client.address,
     };
+
+    console.log(data);
 
     fetch(endpoint.client, {
       method: "POST",

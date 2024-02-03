@@ -1,8 +1,7 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
 import { AuthProps } from "./Auth.static";
-import { endpoint } from "../../static/endpoints/Endpoint";
-
+import { endpoint } from "../../../static/endpoints/Endpoint";
 
 const useAuthForm = ({ formType }: AuthProps) => {
   const { login } = useAuth();
@@ -98,7 +97,7 @@ const useAuthForm = ({ formType }: AuthProps) => {
       });
   };
 
-  return { handleChange, handleFormSubmit, formValues, setFormValues};
+  return { handleChange, handleFormSubmit, formValues, setFormValues };
 };
 
 export default useAuthForm;
