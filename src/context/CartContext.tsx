@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 interface CartContextType {
   items: CartItem[];
@@ -38,19 +39,36 @@ export const CartProvider = ({ children }: any) => {
 
   const addItem = (id: string, itemType: "solid" | "liquid") => {
     setItems((prevItems) => {
-      const cartItem = prevItems.find((item) => item.id === id);
+      // Check if there are existing items in the cart
+      if (prevItems.length > 0) {
+        // Check the type of the first item in the cart
+        const firstItemType = prevItems[0].type;
 
-      if (cartItem) {
-        if (cartItem.type === itemType) {
-          return prevItems.map((item) =>
-            item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-          );
+        // If the types match, allow adding the item
+        if (firstItemType === itemType) {
+          const cartItem = prevItems.find((item) => item.id === id);
+
+          if (cartItem) {
+            // Item is already in the cart, update quantity
+            toast.info("Item already in the cart");
+            return prevItems.map((item) =>
+              item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+            );
+          } else {
+            // Item is not in the cart, add it
+            toast.success("Item added to the cart");
+            return [...prevItems, { id, type: itemType, quantity: 1 }];
+          }
         } else {
+          // Types do not match, throw an error
           console.error("Cannot add item of a different type to the cart");
+          toast.error("Cannot add item of a different type to the cart");
           return prevItems;
         }
       } else {
-        return [...prevItems, { id, type: itemType, quantity: 1 }];
+        // Cart is empty, add the item
+        toast.success("Item added to the cart");
+        return [{ id, type: itemType, quantity: 1 }];
       }
     });
   };

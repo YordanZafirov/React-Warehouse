@@ -1,6 +1,7 @@
 import { useMutation } from "react-query";
 import { endpoint } from "../../../static/endpoints/Endpoint";
 import useProduct from "../../../hooks/Product/Product.hook";
+import { toast } from "react-toastify";
 
 const useDeleteProduct = () => {
   const { refetch } = useProduct();
@@ -26,6 +27,7 @@ const useDeleteProduct = () => {
         throw new Error(`Failed to delete product: ${res.statusText}`);
       }
 
+      toast.success("Product deleted successfully");
       refetch();
     } catch (error) {
       console.error(error);

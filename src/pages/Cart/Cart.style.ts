@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const Modal = styled.dialog`
   width: 50%;
+  height: 70%;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 5px;

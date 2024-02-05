@@ -79,6 +79,13 @@ const useWarehouseForm = () => {
             ...prevValues,
             success: true,
           }));
+
+          setTimeout(() => {
+            setWarehouse((prevValues) => ({
+              ...prevValues,
+              success: false,
+            }));
+          }, 3000);
         }
       })
       .catch((err) => {

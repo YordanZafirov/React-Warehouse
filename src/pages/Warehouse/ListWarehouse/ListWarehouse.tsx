@@ -7,7 +7,7 @@ import useToken from "../../../hooks/Token/Token.hook";
 import useGetWarehouse from "../../../hooks/Warehouse/Warehouse.hook";
 import { Warehouse } from "../WarehouseForm/Warehouse.static";
 import useDeleteWarehouse from "./DeleteWarehouse.logic";
-import { route } from "../../../static/router/Routes";
+import { ToastContainer } from "react-toastify";
 
 const ListWarehouse = () => {
   const { warehouses, error } = useGetWarehouse();
@@ -22,6 +22,7 @@ const ListWarehouse = () => {
   return (
     <div>
       {!warehouses && <p>No warehouses found</p>}
+      <ToastContainer />
       <CenteredH1>List of all warehouses</CenteredH1>
       <StyledTable>
         <thead>

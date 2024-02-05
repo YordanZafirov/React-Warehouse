@@ -6,6 +6,9 @@ import useToken from "../../hooks/Token/Token.hook";
 import { Client } from "../Client/ListClients/Client.static";
 import useGetClient from "../../hooks/Client/Client.hook";
 import useGetWarehouse from "../../hooks/Warehouse/Warehouse.hook";
+import { Order } from "./Order.static";
+import { Warehouse } from "../Warehouse/WarehouseForm/Warehouse.static";
+import { ToastContainer } from "react-toastify";
 
 const ListOrder = () => {
   const { orders, error, deleteOrder } = useOrder();
@@ -24,7 +27,7 @@ const ListOrder = () => {
 
   const getWarehouseName = (warehouseId: string) => {
     const warehouse = warehouses?.find(
-      (warehouse) => warehouse.id === warehouseId
+      (warehouse: Warehouse) => warehouse.id === warehouseId
     );
     return warehouse ? warehouse.name : "Unknown Warehouse";
   };
@@ -32,11 +35,13 @@ const ListOrder = () => {
   return (
     <>
       {!orders && <p>No orders found</p>}
+      <ToastContainer />
       <CenteredH1>List of all orders</CenteredH1>
       <StyledTable>
         <thead>
           <tr>
             <th>Order ID</th>
+            <th>Order Type</th>
             <th>Client</th>
             <th>Warehouse</th>
             <th>CreatedAt</th>
@@ -44,9 +49,10 @@ const ListOrder = () => {
           </tr>
         </thead>
         <tbody>
-          {orders?.map((order) => (
+          {orders?.map((order: Order) => (
             <tr key={order.id}>
               <td>{order.id}</td>
+              <td>{order.type}</td>
               <td>{getClientName(order.clientId)}</td>
               <td>{getWarehouseName(order.warehouseId)}</td>
               <td>{order.createdAt}</td>

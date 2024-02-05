@@ -7,6 +7,7 @@ import useGetClient from "../../../hooks/Client/Client.hook";
 import useToken from "../../../hooks/Token/Token.hook";
 import { Client } from "./Client.static";
 import useDeleteClient from "./DeleteClients.logic";
+import { ToastContainer } from "react-toastify";
 
 const ListClients = () => {
   const { clients, error } = useGetClient();
@@ -20,6 +21,7 @@ const ListClients = () => {
   return (
     <div>
       {!clients && <p>No clients found</p>}
+      <ToastContainer />
       <CenteredH1>List of all clients</CenteredH1>
       <StyledTable>
         <thead>

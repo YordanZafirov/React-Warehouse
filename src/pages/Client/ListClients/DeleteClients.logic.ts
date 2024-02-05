@@ -1,5 +1,6 @@
 import { useMutation } from "react-query";
 import useClient from "../../../hooks/Client/Client.hook";
+import { toast } from "react-toastify";
 
 const useDeleteClient = () => {
   const { refetch } = useClient();
@@ -28,6 +29,8 @@ const useDeleteClient = () => {
       if (!res.ok) {
         throw new Error(`Failed to delete client: ${res.statusText}`);
       }
+
+      toast.success("Client deleted successfully");
       refetch();
     } catch (error) {
       console.error(error);

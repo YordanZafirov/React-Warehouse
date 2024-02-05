@@ -9,6 +9,9 @@ import useDeleteProduct from "./DeleteProduct.logic";
 import useGetProduct from "../../../hooks/Product/Product.hook";
 import { Link } from "react-router-dom";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const ListProducts = () => {
   const { addItem } = useCart();
   const { products, error } = useGetProduct();
@@ -19,9 +22,12 @@ const ListProducts = () => {
     return <p>Error fetching products: {error.message}</p>;
   }
 
+
+
   return (
     <div>
       {!products && <p>No products found</p>}
+      <ToastContainer />
       <CenteredH1>List of all products</CenteredH1>
       <StyledTable>
         <thead>

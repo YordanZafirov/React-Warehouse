@@ -12,6 +12,7 @@ import { endpoint } from "../../static/endpoints/Endpoint";
 import { Client } from "../Client/ListClients/Client.static";
 import useGetClient from "../../hooks/Client/Client.hook";
 import useGetWarehouse from "../../hooks/Warehouse/Warehouse.hook";
+import { Warehouse } from "../Warehouse/WarehouseForm/Warehouse.static";
 
 interface Product {
   id: string;
@@ -205,7 +206,7 @@ const Cart: React.FC = () => {
             value={order.warehouseId}
             onChange={handleChange}
           >
-            {warehouses?.map((warehouse) => (
+            {warehouses?.map((warehouse: Warehouse) => (
               <option key={warehouse.id} value={warehouse.id}>
                 {`${warehouse.name}`}
               </option>
@@ -220,7 +221,7 @@ const Cart: React.FC = () => {
             onChange={handleChange}
           >
             <option value="">Select Outgoing Warehouse</option>
-            {warehouses?.map((warehouse) => (
+            {warehouses?.map((warehouse: Warehouse) => (
               <option key={warehouse.id} value={warehouse.id}>
                 {warehouse.name}
               </option>

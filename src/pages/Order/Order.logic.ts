@@ -1,6 +1,7 @@
 import { Order } from "./Order.static";
 import { endpoint } from "../../static/endpoints/Endpoint";
 import { useMutation, useQuery } from "react-query";
+import { toast } from "react-toastify";
 
 const useOrder = () => {
   const {
@@ -63,6 +64,8 @@ const useOrder = () => {
       if (!res.ok) {
         throw new Error(`Failed to delete order: ${res.statusText}`);
       }
+
+      toast.success("Order deleted successfully");
       refetch();
     } catch (error) {
       console.error(error);

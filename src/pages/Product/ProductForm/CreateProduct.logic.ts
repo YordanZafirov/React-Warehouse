@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { endpoint } from "../../../static/endpoints/Endpoint";
+import { useNavigate } from "react-router-dom";
 
 const useProductForm = () => {
   const [product, setProduct] = useState({
@@ -9,6 +10,8 @@ const useProductForm = () => {
     errMsg: "",
     success: false,
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setProduct((prevValues) => ({
@@ -42,7 +45,7 @@ const useProductForm = () => {
 
     const token = localStorage.getItem("accessToken");
 
-    if(!product.name.trim()){
+    if (!product.name.trim()) {
       setProduct((prevValues) => ({
         ...prevValues,
         errMsg: "Product name cannot be empty",
@@ -55,7 +58,6 @@ const useProductForm = () => {
       unitType: product.unitType,
       type: product.type,
     };
-
 
     fetch(endpoint.product, {
       method: "POST",
@@ -85,6 +87,14 @@ const useProductForm = () => {
             ...prevValues,
             success: true,
           }));
+
+          setTimeout(() => {
+            setProduct((prevValues) => ({
+              ...prevValues,
+              success: false,
+            }));
+            navigate("/product");
+          }, 3000);
         }
       })
       .catch((err) => {

@@ -1,6 +1,7 @@
 import { useMutation } from "react-query";
 import { endpoint } from "../../../static/endpoints/Endpoint";
 import useWarehouse from "../../../hooks/Warehouse/Warehouse.hook";
+import { toast } from "react-toastify";
 
 const useDeleteWarehouse = () => {
   const { refetch } = useWarehouse();
@@ -27,6 +28,7 @@ const useDeleteWarehouse = () => {
         throw new Error(`Failed to delete warehouse: ${res.statusText}`);
       }
 
+      toast.success("Warehouse deleted successfully");
       refetch();
     } catch (error) {
       console.error(error);
