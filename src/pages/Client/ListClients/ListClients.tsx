@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
   StyledTable,
   CenteredH1,
@@ -5,7 +6,7 @@ import {
 import useGetClient from "../../../hooks/Client/Client.hook";
 import useToken from "../../../hooks/Token/Token.hook";
 import { Client } from "./Client.static";
-import useDeleteClient from "./ListClients.logic";
+import useDeleteClient from "./DeleteClients.logic";
 
 const ListClients = () => {
   const { clients, error } = useGetClient();
@@ -43,7 +44,9 @@ const ListClients = () => {
               <td>{client.updatedAt.toLocaleString()}</td>
               {decodedToken?.role !== "VIEWER" && (
                 <td>
-                  <button className="update">Edit</button>
+                  <Link to={`/client/${client.id}`} className="update">
+                    Edit
+                  </Link>
                   <button onClick={() => deleteClient(client.id)}>
                     Delete
                   </button>

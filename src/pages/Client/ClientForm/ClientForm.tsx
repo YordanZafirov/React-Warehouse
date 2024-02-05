@@ -1,7 +1,7 @@
 import Button from "../../../components/button/Button";
 import Form from "../../../components/form/Form";
 import { Alert, Success } from "../../../components/alert/Alert.style";
-import useClientForm from "./ClientForm.logic";
+import useClientForm from "./CreateClient.logic";
 
 const ClientForm = () => {
   const { client, handleChange, handleSubmit } = useClientForm();

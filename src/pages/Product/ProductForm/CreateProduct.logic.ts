@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { endpoint } from "../../../static/endpoints/Endpoint";
-import { token } from "../../../static/token";
 
 const useProductForm = () => {
   const [product, setProduct] = useState({
@@ -41,11 +40,22 @@ const useProductForm = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const token = localStorage.getItem("accessToken");
+
+    if(!product.name.trim()){
+      setProduct((prevValues) => ({
+        ...prevValues,
+        errMsg: "Product name cannot be empty",
+      }));
+      return;
+    }
+
     const data = {
       name: product.name,
       unitType: product.unitType,
       type: product.type,
     };
+
 
     fetch(endpoint.product, {
       method: "POST",

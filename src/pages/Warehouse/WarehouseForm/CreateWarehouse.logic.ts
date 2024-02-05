@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Warehouse } from "./Warehouse.static";
-import { endpoint } from "../../static/endpoints/Endpoint";
-import { token } from "../../static/token";
+import { endpoint } from "../../../static/endpoints/Endpoint";
 
 const useWarehouseForm = () => {
   const [warehouse, setWarehouse] = useState({
@@ -40,6 +39,16 @@ const useWarehouseForm = () => {
   };
 
   const createWarehouse = (data: Partial<Warehouse>) => {
+    const token = localStorage.getItem("accessToken");
+
+    if (!warehouse.name.trim() || !warehouse.address.trim()) {
+      setWarehouse((prevValues) => ({
+        ...prevValues,
+        errMsg: "Name and address cannot be empty",
+      }));
+      return;
+    }
+
     fetch(endpoint.warehouse, {
       method: "POST",
       headers: {

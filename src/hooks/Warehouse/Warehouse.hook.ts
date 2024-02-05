@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { endpoint } from "../../static/endpoints/Endpoint";
-import { Warehouse } from "../../pages/Warehouse/Warehouse.static";
+import { Warehouse } from "../../pages/Warehouse/WarehouseForm/Warehouse.static";
 
 const useGetWarehouse = () => {
   const {

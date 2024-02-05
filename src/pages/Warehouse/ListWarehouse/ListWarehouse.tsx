@@ -1,17 +1,16 @@
+import { Link } from "react-router-dom";
 import {
   CenteredH1,
   StyledTable,
 } from "../../../components/table/Listing.style";
 import useToken from "../../../hooks/Token/Token.hook";
 import useGetWarehouse from "../../../hooks/Warehouse/Warehouse.hook";
-import { Warehouse } from "../Warehouse.static";
-import useDeleteWarehouse from "./ListWarehouse.logic";
+import { Warehouse } from "../WarehouseForm/Warehouse.static";
+import useDeleteWarehouse from "./DeleteWarehouse.logic";
+import { route } from "../../../static/router/Routes";
 
 const ListWarehouse = () => {
-  const {
-    warehouses,
-    error,
-  }: { warehouses: Warehouse[]; error: Error | null } = useGetWarehouse();
+  const { warehouses, error } = useGetWarehouse();
 
   const { deleteWarehouse } = useDeleteWarehouse();
 
@@ -36,7 +35,7 @@ const ListWarehouse = () => {
           </tr>
         </thead>
         <tbody>
-          {warehouses?.map((warehouse) => (
+          {warehouses?.map((warehouse: Warehouse) => (
             <tr key={warehouse.id}>
               <td>{warehouse.name}</td>
               <td>{warehouse.address}</td>
@@ -45,7 +44,9 @@ const ListWarehouse = () => {
               <td>{warehouse.updatedAt.toLocaleString()}</td>
               {decodedToken?.role !== "VIEWER" && (
                 <td>
-                  <button className="update">Edit</button>
+                  <Link to={`/warehouse/${warehouse.id}`} className="update">
+                    Edit
+                  </Link>
                   <button onClick={() => deleteWarehouse(warehouse.id)}>
                     Delete
                   </button>

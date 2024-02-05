@@ -1,7 +1,7 @@
 import Button from "../../../components/button/Button";
 import Form from "../../../components/form/Form";
 import { Alert, Success } from "../../../components/alert/Alert.style";
-import useProductForm from "./ProductForm.logic";
+import useProductForm from "./CreateProduct.logic";
 
 const ProductForm = () => {
   const { product, handleChange, handleSubmit } = useProductForm();
@@ -52,7 +52,7 @@ const ProductForm = () => {
             <option value="solid">solid</option>
             <option value="liquid">liquid</option>
           </select>
-          <Button type="submit">Add product</Button>
+          <Button>Add product</Button>
         </Form>
       </section>
     </>

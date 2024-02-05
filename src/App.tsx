@@ -13,6 +13,9 @@ import { AuthProvider } from "./context/AuthContext";
 import ProductPage from "./pages/Product/ProductPage";
 import { CartProvider } from "./context/CartContext";
 import NotFound from "./pages/NotFound/NotFound";
+import UpdateClient from "./pages/Client/UpdateClient/UpdateClient";
+import UpdateProduct from "./pages/Product/UpdateProduct/UpdateProduct";
+import UpdateWarehouse from "./pages/Warehouse/UpdateWarehouse/UpdateWarehouse";
 
 export const StyledLayout = styled.div`
   display: flex;
@@ -35,8 +38,14 @@ function App() {
             <StyledMain>
               <Routes>
                 <Route path={route.client} element={<Client />} />
+                <Route path={route.updateClient} element={<UpdateClient />} />
                 <Route path={route.product} element={<ProductPage />} />
+                <Route path={route.updateProduct} element={<UpdateProduct />} />
                 <Route path={route.warehouse} element={<Warehouse />} />
+                <Route
+                  path={route.updateWarehouse}
+                  element={<UpdateWarehouse />}
+                />
                 <Route path={route.order} element={<Order />} />
                 <Route path={route.register} element={<Register />} />
                 <Route path={route.login} element={<Login />} />

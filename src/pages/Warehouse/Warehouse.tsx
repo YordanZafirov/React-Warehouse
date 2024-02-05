@@ -1,4 +1,4 @@
-import WarehouseForm from "./WarehouseForm";
+import WarehouseForm from "./WarehouseForm/WarehouseForm";
 import ListWarehouse from "./ListWarehouse/ListWarehouse";
 import { useState } from "react";
 import Button, { ButtonDiv } from "../../components/button/Button";

@@ -5,8 +5,9 @@ import {
 import { useCart } from "../../../context/CartContext";
 import useToken from "../../../hooks/Token/Token.hook";
 import { Product } from "./Product.static";
-import useDeleteProduct from "./ListProduct.logic";
+import useDeleteProduct from "./DeleteProduct.logic";
 import useGetProduct from "../../../hooks/Product/Product.hook";
+import { Link } from "react-router-dom";
 
 const ListProducts = () => {
   const { addItem } = useCart();
@@ -51,7 +52,9 @@ const ListProducts = () => {
                   >
                     Add to cart
                   </button>
-                  <button className="update">Edit</button>
+                  <Link to={`/product/${product.id}`} className="update">
+                    Edit
+                  </Link>
                   <button onClick={() => deleteProduct(product.id)}>
                     Delete
                   </button>

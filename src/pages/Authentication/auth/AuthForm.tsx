@@ -136,7 +136,6 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
             success: false,
           }));
 
-          // Use navigate function to redirect after a delay
           navigate(formType === "register" ? route.login : route.client);
         }, 3000);
 

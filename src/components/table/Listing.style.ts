@@ -42,7 +42,13 @@ export const StyledTable = styled.table`
   }
 
   .update{
+    font-size: 14px;
     background-color: #ffcc00;
+    padding: 8px 12px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
     color: #000;
     margin: 0 5px;
 

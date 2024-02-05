@@ -41,10 +41,10 @@ const useClientForm = () => {
   const validateForm = (): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (
-      !client.accountablePerson ||
-      !client.userName ||
-      !client.email ||
-      !client.address
+      !client.accountablePerson.trim() ||
+      !client.userName.trim() ||
+      !client.email.trim() ||
+      !client.address.trim()
     ) {
       setClient((prevValues) => ({
         ...prevValues,

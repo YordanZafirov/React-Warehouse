@@ -1,7 +1,7 @@
-import Form from "../../components/form/Form";
-import Button from "../../components/button/Button";
-import { Alert, Success } from "../../components/alert/Alert.style";
-import useWarehouseForm from "./Warehouse.logic";
+import Form from "../../../components/form/Form";
+import Button from "../../../components/button/Button";
+import { Alert, Success } from "../../../components/alert/Alert.style";
+import useWarehouseForm from "./CreateWarehouse.logic";
 
 const WarehouseForm = () => {
   const { warehouse, handleChange, handleSubmit } = useWarehouseForm();
