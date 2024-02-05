@@ -106,9 +106,9 @@ const Cart: React.FC = () => {
     });
   };
 
-  useEffect(()=> {
-    fetchProducts()
-  }, [items])
+  useEffect(() => {
+    fetchProducts();
+  }, [items]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -132,10 +132,8 @@ const Cart: React.FC = () => {
 
     const body = JSON.stringify(requestBody);
 
-    console.log(body);
-
     try {
-      fetch("http://localhost:3000/order", {
+      fetch(endpoint.order, {
         method: "POST",
         headers: {
           "Content-type": "application/json",

@@ -31,6 +31,7 @@ const ListOrder = () => {
 
   return (
     <>
+      {!orders && <p>No orders found</p>}
       <CenteredH1>List of all orders</CenteredH1>
       <StyledTable>
         <thead>

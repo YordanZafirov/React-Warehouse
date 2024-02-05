@@ -4,10 +4,14 @@ import {
 } from "../../../components/table/Listing.style";
 import useToken from "../../../hooks/Token/Token.hook";
 import useGetWarehouse from "../../../hooks/Warehouse/Warehouse.hook";
+import { Warehouse } from "../Warehouse.static";
 import useDeleteWarehouse from "./ListWarehouse.logic";
 
 const ListWarehouse = () => {
-  const { warehouses, error } = useGetWarehouse();
+  const {
+    warehouses,
+    error,
+  }: { warehouses: Warehouse[]; error: Error | null } = useGetWarehouse();
 
   const { deleteWarehouse } = useDeleteWarehouse();
 
@@ -18,6 +22,7 @@ const ListWarehouse = () => {
 
   return (
     <div>
+      {!warehouses && <p>No warehouses found</p>}
       <CenteredH1>List of all warehouses</CenteredH1>
       <StyledTable>
         <thead>

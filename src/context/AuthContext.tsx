@@ -43,7 +43,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     if (!isValidToken) {
       localStorage.removeItem("accessToken");
-      navigate("/login");
     }
 
     setIsAuthenticated(true);

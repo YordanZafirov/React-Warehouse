@@ -6,7 +6,7 @@ import {
 } from "../../../components/alert/Alert.style";
 import Form from "../../../components/form/Form";
 import Button from "../../../components/button/Button";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
 import { route } from "../../../static/router/Routes";
 import { endpoint } from "../../../static/endpoints/Endpoint";
@@ -17,9 +17,9 @@ interface AuthProps {
 
 const AuthForm: React.FC<AuthProps> = ({ formType }) => {
   const { login } = useAuth();
-  // const {handleChange, handleFormSubmit, formValues, setFormValues} = useAuthForm(formType);
   const emailRef = useRef<HTMLInputElement>(null);
   const errRef = useRef<HTMLParagraphElement>(null);
+  const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({
     email: "",
@@ -52,25 +52,22 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
     }));
   }, [formValues.email, formValues.password, formValues.confirmPassword]);
 
-  const validateForm = () => {
+  const validateForm = (): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (!emailRegex.test(formValues.email)) {
       setFormValues((prevValues) => ({
         ...prevValues,
-        errMessage: "Invalid email format",
+        errMessage: "Invalid email",
       }));
-      return;
-    }
-
-    if (formValues.password.length < 5) {
+      return false;
+    } else if (formValues.password.length < 5) {
       setFormValues((prevValues) => ({
         ...prevValues,
         errMessage: "Password must be at least 6 characters long",
       }));
-      return;
-    }
-
-    if (
+      return false;
+    } else if (
       formType === "register" &&
       formValues.password !== formValues.confirmPassword
     ) {
@@ -78,14 +75,18 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
         ...prevValues,
         errMessage: "Passwords do not match",
       }));
-      return;
+      return false;
+    } else {
+      return true;
     }
   };
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    //  validateForm();
+    if (!validateForm()) {
+      return;
+    }
 
     const data = {
       email: formValues.email,
@@ -103,7 +104,10 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
     })
       .then(async (res) => {
         if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
+          setFormValues((prevValues) => ({
+            ...prevValues,
+            errMessage: "Invalid credentials. Please try again.",
+          }));
         }
 
         const response = await res.json();
@@ -125,14 +129,18 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
           ...prevValues,
           success: true,
         }));
-        login(localStorage.getItem("accessToken") || "");
 
         setTimeout(() => {
           setFormValues((prevValues) => ({
             ...prevValues,
             success: false,
           }));
+
+          // Use navigate function to redirect after a delay
+          navigate(formType === "register" ? route.login : route.client);
         }, 3000);
+
+        login(localStorage.getItem("accessToken") || "");
       })
       .catch((error) => {
         console.error("Fetch error:", error);
@@ -150,11 +158,7 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
           <h1 aria-live="assertive">
             You {formType === "login" ? "Logged in" : "Registered"} successfully
           </h1>
-          <p>
-            <a href={formType === "register" ? route.login : "#"}>
-              {formType === "login" ? <Navigate to={route.client} /> : "Login"}
-            </a>
-          </p>
+          <p>{formType === "register" ? "Redirecting to login page" : ""}</p>
         </Success>
       ) : (
         <StyledAuth>

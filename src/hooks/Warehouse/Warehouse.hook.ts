@@ -30,10 +30,6 @@ const useGetWarehouse = () => {
 
       const data = await res.json();
 
-      if (!Array.isArray(data)) {
-        throw new Error(`Unexpected data format: ${JSON.stringify(data)}`);
-      }
-
       return data.map((warehouse: Warehouse) => ({
         ...warehouse,
         createdAt: new Date(warehouse.createdAt),

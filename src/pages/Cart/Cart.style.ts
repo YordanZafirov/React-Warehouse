@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Modal = styled.dialog`
-  width: 300px;
+  width: 50%;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -11,6 +11,10 @@ export const Modal = styled.dialog`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
+  @media (max-width: 768px) {
+    width: 90%;
+  }
 `;
 
 export const NoItemsParagraph = styled.p`
@@ -20,7 +24,7 @@ export const NoItemsParagraph = styled.p`
 `;
 
 export const ModalForm = styled.form`
-  max-width: 800px;
+  max-width: 85%;
   margin: 0 auto;
   padding: 20px;
   background-color: #fff;
@@ -72,7 +76,7 @@ export const ModalForm = styled.form`
     }
 
     .input-field {
-      width: 60px;
+      width: 40%;
       margin-left: 5px;
     }
   }

@@ -20,6 +20,7 @@ const ListProducts = () => {
 
   return (
     <div>
+      {!products && <p>No products found</p>}
       <CenteredH1>List of all products</CenteredH1>
       <StyledTable>
         <thead>

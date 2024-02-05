@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 
 import { Warehouse } from "../Order/ListOrder";
 import { endpoint } from "../../static/endpoints/Endpoint";
+import useOrder from "../Order/Order.logic";
+import useGetClient from "../../hooks/Client/Client.hook";
+import useGetProduct from "../../hooks/Product/Product.hook";
+import useGetWarehouse from "../../hooks/Warehouse/Warehouse.hook";
 
 export interface Client {
   createdAt: string;
@@ -30,10 +34,11 @@ export interface Product {
 }
 
 const Invoice = () => {
+  // const { orders } = useOrder();
+  const { clients } = useGetClient();
+  const { products } = useGetProduct();
+  const { warehouses } = useGetWarehouse();
   const [orderDetails, setOrderDetails] = useState<Order[]>([]);
-  const [clients, setClients] = useState<Client[]>([]);
-  const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
 
   const token = localStorage.getItem("accessToken");
 
@@ -47,62 +52,17 @@ const Invoice = () => {
     })
       .then((res) => res.json())
       .then((data: Order[]) => {
-        // setOrderDetails(
-        //   data.map((order) => ({
-        //     ...order,
-        //     createdAt: new Date(order.createdAt).toLocaleString(),
-        //   }))
-        // );
-      });
-  };
-
-  const fetchClients = () => {
-    fetch(endpoint.client, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setClients(data);
-      });
-  };
-
-  const fetchWarehouses = () => {
-    fetch(endpoint.warehouse, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setWarehouses(data);
-      });
-  };
-
-  const fetchProducts = () => {
-    fetch(endpoint.product, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setProducts(data);
+        setOrderDetails(
+          data.map((order) => ({
+            ...order,
+            createdAt: new Date(order.createdAt),
+          }))
+        );
       });
   };
 
   useEffect(() => {
     fetchOrdersDetails();
-    fetchClients();
-    fetchWarehouses();
-    fetchProducts();
     console.log("OrderDetails: ", orderDetails);
     console.log("Clients: ", clients);
     console.log("Warehouses: ", warehouses);
@@ -110,20 +70,20 @@ const Invoice = () => {
   }, []);
 
   const getClientName = (clientId: string) => {
-    const client = clients.find((client) => client.id === clientId);
+    const client = clients.find((client: Client) => client.id === clientId);
     console.log(client);
     return client ? client.accountablePerson : "Unknown Client";
   };
 
   const getWarehouseName = (warehouseId: string) => {
-    const warehouse = warehouses.find(
+    const warehouse = warehouses?.find(
       (warehouse) => warehouse.id === warehouseId
     );
     return warehouse ? warehouse.name : "Unknown Warehouse";
   };
 
   const getProductName = (productId: string) => {
-    const product = products.find((product) => product.id === productId);
+    const product = products?.find((product) => product.id === productId);
     return product ? product.name : "Unknown Product";
   };
 

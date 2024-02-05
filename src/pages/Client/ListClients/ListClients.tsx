@@ -18,6 +18,7 @@ const ListClients = () => {
 
   return (
     <div>
+      {!clients && <p>No clients found</p>}
       <CenteredH1>List of all clients</CenteredH1>
       <StyledTable>
         <thead>
