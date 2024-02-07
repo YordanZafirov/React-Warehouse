@@ -39,6 +39,7 @@ const StyledButton = styled.button`
 
   @media (max-width: 768px) {
     width: 50%;
+    font-size: 1rem;
   }
 
   @media (max-width: 500px) {

@@ -1,8 +1,5 @@
 import { Link } from "react-router-dom";
-import {
-  CenteredH1,
-  StyledTable,
-} from "../../../components/table/Listing.style";
+import { CenteredH1, StyledTable } from "../../../components/table/Table.style";
 import useToken from "../../../hooks/Token/Token.hook";
 import useGetWarehouse from "../../../hooks/Warehouse/Warehouse.hook";
 import { Warehouse } from "../WarehouseForm/Warehouse.static";
@@ -12,7 +9,7 @@ import { ToastContainer } from "react-toastify";
 const ListWarehouse = () => {
   const { warehouses, error } = useGetWarehouse();
 
-  const { deleteWarehouse } = useDeleteWarehouse();
+  const { deleteWarehouse, permanentDeleteWarehouse } = useDeleteWarehouse();
 
   const decodedToken = useToken();
   if (error) {
@@ -38,11 +35,11 @@ const ListWarehouse = () => {
         <tbody>
           {warehouses?.map((warehouse: Warehouse) => (
             <tr key={warehouse.id}>
-              <td>{warehouse.name}</td>
-              <td>{warehouse.address}</td>
-              <td>{warehouse.type}</td>
-              <td>{warehouse.createdAt.toLocaleString()}</td>
-              <td>{warehouse.updatedAt.toLocaleString()}</td>
+              <td data-label="Name:">{warehouse.name}</td>
+              <td data-label="Address:">{warehouse.address}</td>
+              <td data-label="Type:">{warehouse.type}</td>
+              <td data-label="Created at:">{warehouse.createdAt.toLocaleString()}</td>
+              <td data-label="Updated at:">{warehouse.updatedAt.toLocaleString()}</td>
               {decodedToken?.role !== "VIEWER" && (
                 <td>
                   <Link to={`/warehouse/${warehouse.id}`} className="update">
@@ -51,6 +48,14 @@ const ListWarehouse = () => {
                   <button onClick={() => deleteWarehouse(warehouse.id)}>
                     Delete
                   </button>
+                  {decodedToken?.role === "OWNER" && (
+                    <button
+                      className="permanent-delete"
+                      onClick={() => permanentDeleteWarehouse(warehouse.id)}
+                    >
+                      Permanent Delete
+                    </button>
+                  )}
                 </td>
               )}
             </tr>

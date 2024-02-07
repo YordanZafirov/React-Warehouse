@@ -74,8 +74,6 @@ const useClientForm = () => {
       address: client.address,
     };
 
-    console.log(data);
-
     fetch(endpoint.client, {
       method: "POST",
       headers: {
@@ -109,6 +107,13 @@ const useClientForm = () => {
             success: true,
           }));
         }
+
+        setTimeout(() => {
+          setClient((prevValues) => ({
+            ...prevValues,
+            success: false,
+          }));
+        }, 2000);
       })
       .catch(() => {
         // Handle general errors

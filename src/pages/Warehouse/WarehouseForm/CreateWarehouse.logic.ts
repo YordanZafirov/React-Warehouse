@@ -85,7 +85,7 @@ const useWarehouseForm = () => {
               ...prevValues,
               success: false,
             }));
-          }, 3000);
+          }, 2000);
         }
       })
       .catch((err) => {

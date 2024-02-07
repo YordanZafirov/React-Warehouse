@@ -1,4 +1,4 @@
-import { CenteredH1, StyledTable } from "../../components/table/Listing.style";
+import { CenteredH1, StyledTable } from "../../components/table/Table.style";
 import Invoice from "../Invoice/Invoice";
 
 import useOrder from "./Order.logic";
@@ -9,9 +9,10 @@ import useGetWarehouse from "../../hooks/Warehouse/Warehouse.hook";
 import { Order } from "./Order.static";
 import { Warehouse } from "../Warehouse/WarehouseForm/Warehouse.static";
 import { ToastContainer } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const ListOrder = () => {
-  const { orders, error, deleteOrder } = useOrder();
+  const { orders, error, deleteOrder, permanentDeleteOrder } = useOrder();
   const { clients } = useGetClient();
   const { warehouses } = useGetWarehouse();
   const decodedToken = useToken();
@@ -45,28 +46,52 @@ const ListOrder = () => {
             <th>Client</th>
             <th>Warehouse</th>
             <th>CreatedAt</th>
-            {decodedToken?.role !== "VIEWER" && <th>Actions</th>}
+            {decodedToken?.role !== "VIEWER" && (
+              <>
+                <th>Invoices</th>
+                <th>Actions</th>
+              </>
+            )}
           </tr>
         </thead>
         <tbody>
           {orders?.map((order: Order) => (
             <tr key={order.id}>
-              <td>{order.id}</td>
-              <td>{order.type}</td>
-              <td>{getClientName(order.clientId)}</td>
-              <td>{getWarehouseName(order.warehouseId)}</td>
-              <td>{order.createdAt}</td>
+              <td data-label="Order ID:">{order.id}</td>
+              <td data-label="Order Type:">{order.type}</td>
+              <td data-label="Client:">{getClientName(order.clientId)}</td>
+              <td data-label="Warehouse:">{getWarehouseName(order.warehouseId)}</td>
+              <td data-label="Created at:">{order.createdAt}</td>
               {decodedToken?.role !== "VIEWER" && (
-                <td>
-                  <button className="update">Invoice</button>
-                  <button onClick={() => deleteOrder(order.id)}>Delete</button>
-                </td>
+                <>
+                  <td>
+                    {order.type === "stock picking" && (
+                      <div className="button-container">
+                        <Link className="update" to={`/invoice/${order.id}`}>
+                          Invoice
+                        </Link>
+                      </div>
+                    )}
+                  </td>
+                  <td>
+                    <button onClick={() => deleteOrder(order.id)}>
+                      Delete
+                    </button>
+                    {decodedToken?.role === "OWNER" && (
+                      <button
+                        className="permanent-delete"
+                        onClick={() => permanentDeleteOrder(order.id)}
+                      >
+                        Permanent Delete
+                      </button>
+                    )}
+                  </td>
+                </>
               )}
             </tr>
           ))}
         </tbody>
       </StyledTable>
-      <Invoice />
     </>
   );
 };

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useCart } from "../../context/CartContext";
 import {
   ClearButton,
+  FormRow,
   ModalButton,
   ModalButtonDiv,
   ModalForm,
@@ -13,6 +14,7 @@ import { Client } from "../Client/ListClients/Client.static";
 import useGetClient from "../../hooks/Client/Client.hook";
 import useGetWarehouse from "../../hooks/Warehouse/Warehouse.hook";
 import { Warehouse } from "../Warehouse/WarehouseForm/Warehouse.static";
+import { toast } from "react-toastify";
 
 interface Product {
   id: string;
@@ -33,8 +35,11 @@ interface Order {
   success: boolean;
 }
 
-const Cart: React.FC = () => {
+const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
   const { items, clearCart, removeItem } = useCart();
+  const { clients } = useGetClient();
+  const { warehouses } = useGetWarehouse();
+
   const [order, setOrder] = useState<Order>({
     type: "",
     clientId: "",
@@ -46,9 +51,9 @@ const Cart: React.FC = () => {
   });
 
   const [products, setProducts] = useState<Product[]>([]);
-
-  const { clients } = useGetClient();
-  const { warehouses } = useGetWarehouse();
+  const [filteredWarehouses, setFilteredWarehouses] = useState<
+    Warehouse[] | undefined
+  >(undefined);
 
   const token = localStorage.getItem("accessToken");
 
@@ -111,6 +116,27 @@ const Cart: React.FC = () => {
     fetchProducts();
   }, [items]);
 
+  useEffect(() => {
+    if (clients && clients.length > 0 && warehouses && warehouses.length > 0) {
+      setOrder((prevOrder) => ({
+        ...prevOrder,
+        type: prevOrder.type || "stock picking",
+        clientId: prevOrder.clientId || clients[0]?.id || "",
+        warehouseId: prevOrder.warehouseId || warehouses[0]?.id || "",
+        outgoingWarehouse: prevOrder.outgoingWarehouse || "",
+      }));
+    }
+  }, [clients, warehouses]);
+
+  useEffect(() => {
+    if (products.length > 0) {
+      const filteredWarehouses = warehouses?.filter(
+        (warehouse: Warehouse) => warehouse.type === products[0]?.type
+      );
+      setFilteredWarehouses(filteredWarehouses);
+    }
+  }, [products, warehouses]);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { type, clientId, warehouseId, outgoingWarehouse } = order;
@@ -142,22 +168,26 @@ const Cart: React.FC = () => {
         },
         body,
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("Error creating order");
+          }
+          return res.json();
+        })
         .then((data) => {
-          if (data.success) {
-            setOrder((prevOrder) => ({
-              ...prevOrder,
-              success: true,
-            }));
+          if (data) {
+            toast.success("Order created successfully");
+            clearCart();
+            setTimeout(() => {
+              onSubmit();
+            }, 2000);
           } else {
-            setOrder((prevOrder) => ({
-              ...prevOrder,
-              errMsg: data.message,
-            }));
+            toast.error("Error creating order");
           }
         });
     } catch (error) {
       console.error(error);
+      toast.error("Error creating order");
     }
   };
 
@@ -167,66 +197,74 @@ const Cart: React.FC = () => {
         <NoItemsParagraph>No items in the cart!</NoItemsParagraph>
       ) : (
         <ModalForm title="Cart" onSubmit={handleSubmit}>
-          <label htmlFor="order-type">Order Type</label>
-          <select
-            name="type"
-            id="order-type"
-            required
-            value={order.type}
-            onChange={handleChange}
-          >
-            <option value="stock picking">Stock Picking</option>
-            <option value="delivery">Delivery</option>
-            <option value="transfer">Transfer</option>
-          </select>
-          <label htmlFor="client">Client</label>
-          <select
-            name="clientId"
-            id="client"
-            required
-            value={order.clientId}
-            onChange={handleChange}
-          >
-            {clients ? (
-              clients.map((client: Client) => (
-                <option key={client.id} value={client.id}>
-                  {client.accountablePerson}
+          <FormRow>
+            <label htmlFor="order-type">Order Type:</label>
+            <select
+              name="type"
+              id="order-type"
+              required
+              value={order.type}
+              onChange={handleChange}
+            >
+              <option value="stock picking">Stock Picking</option>
+              <option value="delivery">Delivery</option>
+              <option value="transfer">Transfer</option>
+            </select>
+          </FormRow>
+          <FormRow>
+            <label htmlFor="client">Client:</label>
+            <select
+              name="clientId"
+              id="client"
+              required
+              value={order.clientId}
+              onChange={handleChange}
+            >
+              {clients ? (
+                clients.map((client: Client) => (
+                  <option key={client.id} value={client.id}>
+                    {client.accountablePerson}
+                  </option>
+                ))
+              ) : (
+                <option value="" disabled>
+                  Loading clients...
                 </option>
-              ))
-            ) : (
-              <option value="" disabled>
-                Loading clients...
-              </option>
-            )}
-          </select>
-          <label htmlFor="warehouse">Warehouse</label>
-          <select
-            name="warehouseId"
-            id="warehouse"
-            value={order.warehouseId}
-            onChange={handleChange}
-          >
-            {warehouses?.map((warehouse: Warehouse) => (
-              <option key={warehouse.id} value={warehouse.id}>
-                {`${warehouse.name}`}
-              </option>
-            ))}
-          </select>
+              )}
+            </select>
+          </FormRow>
+          <FormRow>
+            <label htmlFor="warehouse">Warehouse:</label>
+            <select
+              name="warehouseId"
+              id="warehouse"
+              value={order.warehouseId}
+              onChange={handleChange}
+            >
+              {filteredWarehouses?.map((warehouse: Warehouse) => (
+                <option key={warehouse.id} value={warehouse.id}>
+                  {warehouse.name}
+                </option>
+              ))}
+            </select>
+          </FormRow>
 
-          <label htmlFor="outgoing-warehouse">Outgoing Warehouse</label>
-          <select
-            name="outgoingWarehouse"
-            id="outgoing-warehouse"
-            value={order.outgoingWarehouse}
-            onChange={handleChange}
-          >
-            <option value="">Select Outgoing Warehouse</option>
-            {warehouses?.map((warehouse: Warehouse) => (
-              <option key={warehouse.id} value={warehouse.id}>
-                {warehouse.name}
-              </option>
-            ))}
-          </select>
+          <FormRow>
+            <label htmlFor="outgoing-warehouse">Outgoing Warehouse:</label>
+            <select
+              name="outgoingWarehouse"
+              id="outgoing-warehouse"
+              value={order.outgoingWarehouse}
+              onChange={handleChange}
+            >
+              <option value="">Select Outgoing Warehouse</option>
+              {filteredWarehouses?.map((warehouse: Warehouse) => (
+                <option key={warehouse.id} value={warehouse.id}>
+                  {warehouse.name}
+                </option>
+              ))}
+            </select>
+          </FormRow>
 
           {products.length > 0 && ( // Check if there are products before rendering
             <>

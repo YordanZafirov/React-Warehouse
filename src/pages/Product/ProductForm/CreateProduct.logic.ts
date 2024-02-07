@@ -93,8 +93,7 @@ const useProductForm = () => {
               ...prevValues,
               success: false,
             }));
-            navigate("/product");
-          }, 3000);
+          }, 2000);
         }
       })
       .catch((err) => {

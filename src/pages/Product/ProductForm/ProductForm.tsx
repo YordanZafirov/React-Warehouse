@@ -19,7 +19,7 @@ const ProductForm = () => {
           </Alert>
         )}
 
-        <Form title="Product Page" onSubmit={handleSubmit}>
+        <Form title="Create Product" onSubmit={handleSubmit}>
           <label htmlFor="name">Product name</label>
           <input
             type="text"

@@ -10,6 +10,12 @@ export interface ModalInstance {
 const CartModal = forwardRef<ModalInstance>((props, ref) => {
   const dialog = useRef<HTMLDialogElement>(null);
 
+  const handleClose = () => {
+    if (dialog.current) {
+      dialog.current.close();
+    }
+  };
+
   useImperativeHandle(
     ref,
     () => ({
@@ -18,11 +24,7 @@ const CartModal = forwardRef<ModalInstance>((props, ref) => {
           dialog.current.showModal();
         }
       },
-      close: () => {
-        if (dialog.current) {
-          dialog.current.close();
-        }
-      },
+      close: handleClose,
     }),
     []
   );
@@ -32,11 +34,11 @@ const CartModal = forwardRef<ModalInstance>((props, ref) => {
       <Modal id="modal" ref={dialog}>
         <CloseModalButton
           className="close"
-          onClick={() => dialog.current?.close()}
+          onClick={handleClose}
         >
           X
         </CloseModalButton>
-        <Cart />
+        <Cart onSubmit={handleClose}/>
       </Modal>
     </div>
   );

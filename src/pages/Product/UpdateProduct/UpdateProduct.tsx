@@ -65,7 +65,7 @@ const UpdateProduct = () => {
           </Alert>
         )}
 
-        <Form title="Product Page" onSubmit={handleSubmit}>
+        <Form title="Update Product" onSubmit={handleSubmit}>
           <label htmlFor="name">Product name</label>
           <input
             type="text"

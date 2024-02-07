@@ -63,7 +63,7 @@ const UpdateWarehouse = () => {
             <p aria-live="assertive">{alert.errMsg}</p>
           </Alert>
         )}
-        <Form title="Warehouse Page" onSubmit={handleSubmit}>
+        <Form title="Update Warehouse" onSubmit={handleSubmit}>
           <label htmlFor="name">Warehouse name</label>
           <input
             type="text"

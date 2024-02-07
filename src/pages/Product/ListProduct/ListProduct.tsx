@@ -1,7 +1,4 @@
-import {
-  CenteredH1,
-  StyledTable,
-} from "../../../components/table/Listing.style";
+import { CenteredH1, StyledTable } from "../../../components/table/Table.style";
 import { useCart } from "../../../context/CartContext";
 import useToken from "../../../hooks/Token/Token.hook";
 import { Product } from "./Product.static";
@@ -15,14 +12,12 @@ import "react-toastify/dist/ReactToastify.css";
 const ListProducts = () => {
   const { addItem } = useCart();
   const { products, error } = useGetProduct();
-  const { deleteProduct } = useDeleteProduct();
+  const { deleteProduct, permanentDeleteProduct } = useDeleteProduct();
   const decodedToken = useToken();
 
   if (error) {
     return <p>Error fetching products: {error.message}</p>;
   }
-
-
 
   return (
     <div>
@@ -43,11 +38,11 @@ const ListProducts = () => {
         <tbody>
           {products?.map((product: Product) => (
             <tr key={product.id}>
-              <td>{product.name}</td>
-              <td>{product.type}</td>
-              <td>{product.unitType}</td>
-              <td>{product.createdAt.toLocaleString()}</td>
-              <td>{product.updatedAt.toLocaleString()}</td>
+              <td data-label="Name:">{product.name}</td>
+              <td data-label="Type:">{product.type}</td>
+              <td data-label="Unit Type:">{product.unitType}</td>
+              <td data-label="Created at:">{product.createdAt.toLocaleString()}</td>
+              <td data-label="Updated at:">{product.updatedAt.toLocaleString()}</td>
               {decodedToken?.role !== "VIEWER" && (
                 <td>
                   <button
@@ -64,6 +59,14 @@ const ListProducts = () => {
                   <button onClick={() => deleteProduct(product.id)}>
                     Delete
                   </button>
+                  {decodedToken?.role === "OWNER" && (
+                    <button
+                      className="permanent-delete"
+                      onClick={() => permanentDeleteProduct(product.id)}
+                    >
+                      Permanent Delete
+                    </button>
+                  )}
                 </td>
               )}
             </tr>

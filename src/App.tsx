@@ -16,6 +16,7 @@ import NotFound from "./pages/NotFound/NotFound";
 import UpdateClient from "./pages/Client/UpdateClient/UpdateClient";
 import UpdateProduct from "./pages/Product/UpdateProduct/UpdateProduct";
 import UpdateWarehouse from "./pages/Warehouse/UpdateWarehouse/UpdateWarehouse";
+import Invoice from "./pages/Invoice/Invoice";
 
 export const StyledLayout = styled.div`
   display: flex;
@@ -47,6 +48,7 @@ function App() {
                   element={<UpdateWarehouse />}
                 />
                 <Route path={route.order} element={<Order />} />
+                <Route path={route.invoice} element={<Invoice />} />
                 <Route path={route.register} element={<Register />} />
                 <Route path={route.login} element={<Login />} />
                 <Route path={route.notFound} element={<NotFound />} />

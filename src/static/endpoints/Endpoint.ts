@@ -4,6 +4,7 @@ export const endpoint = {
   login: "http://localhost:3000/auth/login",
   product: "http://localhost:3000/product",
   order: "http://localhost:3000/order",
-  orderDetail: "http://localhost:3000/orderDetail",
+  orderDetail: "http://localhost:3000/order-details",
   client: "http://localhost:3000/client",
+  invoice: "http://localhost:3000/invoice",
 };

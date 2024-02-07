@@ -19,6 +19,12 @@ export const NavDiv = styled.div`
   .logo {
     padding: 15px 0;
   }
+
+  @media (max-width: 768px) {
+    .logo {
+      padding: 0;
+    }
+  }
 `;
 
 export const Ul = styled.ul<NavProps>`
@@ -42,20 +48,24 @@ export const Ul = styled.ul<NavProps>`
 
   @media (max-width: 768px) {
     flex-flow: column nowrap;
+    align-items: center;
     background-color: #333;
+    
     position: fixed;
     transform: ${({ open }: NavProps) =>
       open ? "translateX(0)" : "translateX(100%)"};
     top: 0;
     right: 0;
     height: 100vh;
-    width: 300px;
+    width: 100%;
     padding-top: 3.5rem;
     transition: transform 0.3s ease-in-out;
     z-index: 1;
 
     li {
       color: #fff;
+      margin-top: 20px;
+      border-bottom: 1px solid #fff;
     }
   }
 `;

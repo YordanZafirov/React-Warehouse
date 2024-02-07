@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Modal = styled.dialog`
   width: 50%;
-  height: 70%;
+  height: 80%;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -38,14 +38,9 @@ export const ModalForm = styled.form`
     margin-bottom: 8px;
   }
 
-  select,
-  ul {
-    margin-bottom: 16px;
-  }
-
   h2 {
     font-size: 18px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
   ul {
@@ -77,9 +72,19 @@ export const ModalForm = styled.form`
     }
 
     .input-field {
-      width: 40%;
+      width: 20%;
       margin-left: 5px;
     }
+  }
+`;
+
+export const FormRow = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  label {
+    margin-right: 1rem;
   }
 `;
 
@@ -135,7 +140,6 @@ export const StyledCartIcon = styled.div`
     transition: transform 0.3s ease-in-out;
 
     &:hover {
-      // make it zoom a little
       transform: scale(1.1);
     }
   }

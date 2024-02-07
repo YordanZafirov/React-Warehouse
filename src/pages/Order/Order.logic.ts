@@ -11,6 +11,7 @@ const useOrder = () => {
     refetch,
   } = useQuery("orders", getOrder);
   const deleteOrderMutation = useMutation(deleteOrder);
+  const permanentDeleteOrderMutation = useMutation(permanentDeleteOrder);
 
   async function getOrder() {
     try {
@@ -72,7 +73,43 @@ const useOrder = () => {
     }
   }
 
-  return { orders, isLoading, error, deleteOrder: deleteOrderMutation.mutate };
+  async function permanentDeleteOrder(id: string) {
+    try {
+      const token = localStorage.getItem("accessToken");
+
+      if (!token) {
+        throw new Error("Access token not found");
+      }
+
+      const res = await fetch(`${endpoint.order}/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error(`Failed to delete order: ${res.statusText}`);
+      }
+
+      toast.success("Order permanent deleted successfully");
+      refetch();
+    } catch (error) {
+      toast.error(
+        "Failed to delete order. Order is associated with an invoice"
+      );
+      console.error(error);
+    }
+  }
+
+  return {
+    orders,
+    isLoading,
+    error,
+    deleteOrder: deleteOrderMutation.mutate,
+    permanentDeleteOrder: permanentDeleteOrderMutation.mutate,
+  };
 };
 
 export default useOrder;

@@ -1,8 +1,5 @@
 import { Link } from "react-router-dom";
-import {
-  StyledTable,
-  CenteredH1,
-} from "../../../components/table/Listing.style";
+import { StyledTable, CenteredH1 } from "../../../components/table/Table.style";
 import useGetClient from "../../../hooks/Client/Client.hook";
 import useToken from "../../../hooks/Token/Token.hook";
 import { Client } from "./Client.static";
@@ -11,7 +8,7 @@ import { ToastContainer } from "react-toastify";
 
 const ListClients = () => {
   const { clients, error } = useGetClient();
-  const { deleteClient } = useDeleteClient();
+  const { deleteClient, permanentDeleteClient } = useDeleteClient();
   const decodedToken = useToken();
 
   if (error) {
@@ -38,12 +35,12 @@ const ListClients = () => {
         <tbody>
           {clients?.map((client: Client) => (
             <tr key={client.id}>
-              <td>{client.accountablePerson}</td>
-              <td>{client.userName}</td>
-              <td>{client.email}</td>
-              <td>{client.address}</td>
-              <td>{client.createdAt.toLocaleString()}</td>
-              <td>{client.updatedAt.toLocaleString()}</td>
+              <td data-label="Accountble Person:">{client.accountablePerson}</td>
+              <td data-label="Useer Name:">{client.userName}</td>
+              <td data-label="Email:">{client.email}</td>
+              <td data-label="Address:">{client.address}</td>
+              <td data-label="Created at:">{client.createdAt.toLocaleString()}</td>
+              <td data-label="Updated at:">{client.updatedAt.toLocaleString()}</td>
               {decodedToken?.role !== "VIEWER" && (
                 <td>
                   <Link to={`/client/${client.id}`} className="update">
@@ -52,6 +49,14 @@ const ListClients = () => {
                   <button onClick={() => deleteClient(client.id)}>
                     Delete
                   </button>
+                  {decodedToken?.role === "OWNER" && (
+                    <button
+                      className="permanent-delete"
+                      onClick={() => permanentDeleteClient(client.id)}
+                    >
+                      Permanent Delete
+                    </button>
+                  )}
                 </td>
               )}
             </tr>
