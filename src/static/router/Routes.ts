@@ -7,6 +7,7 @@ export const route = {
   updateWarehouse: "/warehouse/:id",
   order: "/order",
   invoice: "/invoice/:id",
+  report: "/report",
   login: "/login",
   register: "/register",
   notFound: "*"

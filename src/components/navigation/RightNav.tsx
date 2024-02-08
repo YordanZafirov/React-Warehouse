@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { jwtDecode } from "jwt-decode";
 
 import { route } from "../../static/router/Routes";
 
@@ -15,18 +14,18 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import CartIcon from "../../pages/Cart/CartIcon";
 import CartModal, { ModalInstance } from "../../pages/Cart/CartModal";
-import { JwtPayload } from "jsonwebtoken";
 import useToken from "../../hooks/Token/Token.hook";
 
 interface NavProps {
   open: boolean;
+  handleClick: () => void;
 }
 
 const StyledProfile = styled.div`
   position: relative;
 `;
 
-const RightNav: React.FC<NavProps> = ({ open }) => {
+const RightNav: React.FC<NavProps> = ({ open, handleClick }) => {
   const { isAuthenticated, logout } = useAuth();
   const [showPopover, setShowPopover] = useState(false);
   const decodedToken = useToken();
@@ -47,6 +46,26 @@ const RightNav: React.FC<NavProps> = ({ open }) => {
     }
   };
 
+  const handleCloseNav = () => {
+    handleClick();
+    handlePopoverClose();
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (showPopover && !target.closest("#popover-content")) {
+        handlePopoverClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showPopover]);
+
   return (
     <nav>
       <Ul open={open}>
@@ -58,17 +77,40 @@ const RightNav: React.FC<NavProps> = ({ open }) => {
                 <CartModal ref={cartModalRef} />
               </>
             )}
-            <NavLink to={route.client}>
+            <NavLink
+              className="nav-link"
+              to={route.client}
+              onClick={handleCloseNav}
+            >
               <li>Clients</li>
             </NavLink>
-            <NavLink to={route.product}>
+            <NavLink
+              className="nav-link"
+              to={route.product}
+              onClick={handleCloseNav}
+            >
               <li>Products</li>
             </NavLink>
-            <NavLink to={route.warehouse}>
+            <NavLink
+              className="nav-link"
+              to={route.warehouse}
+              onClick={handleCloseNav}
+            >
               <li>Warehouses</li>
             </NavLink>
-            <NavLink to={route.order}>
+            <NavLink
+              className="nav-link"
+              to={route.order}
+              onClick={handleCloseNav}
+            >
               <li>Orders</li>
+            </NavLink>
+            <NavLink
+              className="nav-link"
+              to={route.report}
+              onClick={handleCloseNav}
+            >
+              <li>Reports</li>
             </NavLink>
             <StyledProfile>
               <ProfileSpan onClick={handleProfileClick}>
@@ -76,8 +118,7 @@ const RightNav: React.FC<NavProps> = ({ open }) => {
               </ProfileSpan>
               {showPopover && (
                 <PopoverContainer show={showPopover}>
-                  <PopoverContent>
-                    {/* Display email and role from decoded token */}
+                  <PopoverContent id="popover-content">
                     <div>Email: {decodedToken?.email}</div>
                     <div>Role: {decodedToken?.role}</div>
                     <PopoverLink
@@ -98,10 +139,10 @@ const RightNav: React.FC<NavProps> = ({ open }) => {
         ) : (
           <>
             {" "}
-            <NavLink to={route.register}>
+            <NavLink to={route.register} onClick={handleCloseNav}>
               <li>Register</li>
             </NavLink>
-            <NavLink to={route.login}>
+            <NavLink to={route.login} onClick={handleCloseNav}>
               <li>Login</li>
             </NavLink>
           </>

@@ -7,7 +7,6 @@ import Register from "./pages/Authentication/Register/Register";
 import Login from "./pages/Authentication/Login/Login";
 import Client from "./pages/Client/Client";
 import Warehouse from "./pages/Warehouse/Warehouse";
-import Order from "./pages/Order/Order";
 import { route } from "./static/router/Routes";
 import { AuthProvider } from "./context/AuthContext";
 import ProductPage from "./pages/Product/ProductPage";
@@ -17,6 +16,8 @@ import UpdateClient from "./pages/Client/UpdateClient/UpdateClient";
 import UpdateProduct from "./pages/Product/UpdateProduct/UpdateProduct";
 import UpdateWarehouse from "./pages/Warehouse/UpdateWarehouse/UpdateWarehouse";
 import Invoice from "./pages/Invoice/Invoice";
+import ListOrder from "./pages/Order/ListOrder";
+import Report from "./pages/Report/Report";
 
 export const StyledLayout = styled.div`
   display: flex;
@@ -47,8 +48,9 @@ function App() {
                   path={route.updateWarehouse}
                   element={<UpdateWarehouse />}
                 />
-                <Route path={route.order} element={<Order />} />
+                <Route path={route.order} element={<ListOrder />} />
                 <Route path={route.invoice} element={<Invoice />} />
+                <Route path={route.report} element={<Report />} />
                 <Route path={route.register} element={<Register />} />
                 <Route path={route.login} element={<Login />} />
                 <Route path={route.notFound} element={<NotFound />} />

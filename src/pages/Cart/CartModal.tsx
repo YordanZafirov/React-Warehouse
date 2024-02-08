@@ -32,13 +32,10 @@ const CartModal = forwardRef<ModalInstance>((props, ref) => {
   return (
     <div>
       <Modal id="modal" ref={dialog}>
-        <CloseModalButton
-          className="close"
-          onClick={handleClose}
-        >
+        <CloseModalButton className="close" onClick={handleClose}>
           X
         </CloseModalButton>
-        <Cart onSubmit={handleClose}/>
+        <Cart onSubmit={handleClose} />
       </Modal>
     </div>
   );

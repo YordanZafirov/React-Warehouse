@@ -14,7 +14,8 @@ export const Modal = styled.dialog`
   transform: translate(-50%, -50%);
 
   @media (max-width: 768px) {
-    width: 90%;
+    width: 90vw;
+    height: 90vh;
   }
 `;
 
@@ -26,7 +27,7 @@ export const NoItemsParagraph = styled.p`
 
 export const ModalForm = styled.form`
   max-width: 85%;
-  margin: 0 auto;
+  margin: auto;
   padding: 20px;
   background-color: #fff;
   border-radius: 8px;
@@ -47,44 +48,95 @@ export const ModalForm = styled.form`
     list-style: none;
     padding: 0;
     position: relative;
+  }
 
-    .product-item {
-      position: relative;
-      padding: 16px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-bottom: 16px;
-    }
-
-    .product-name {
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    .input-group {
-      display: flex;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-
-    .label {
-      margin-right: 8px;
-    }
-
-    .input-field {
-      width: 20%;
-      margin-left: 5px;
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 16px;
     }
   }
 `;
 
-export const FormRow = styled.div`
+export const ProductSection = styled.div`
+  margin-top: 20px;
+
+  li{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    position: relative;
+  }
+`;
+
+export const ProductItem = styled.div`
+  position: relative;
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  
+
+  .product-name {
+    font-size: 16px;
+    margin-right: 16px;
+    margin-bottom: 10px;
+    color: #000;
+  }
+`;
+
+export const InputGroup = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 8px;
+
+  label {
+    margin-right: 10px;
+    color: #000;
+  }
+
+  input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 20%;
+  }
+
+  @media (max-width: 768px) {
+    label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+  }
+`;
+
+export const ModalInputField = styled.input`
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 50px;
+  margin-left: 10px;
+  margin-bottom: 5px;
+
+  /* @media (max-width: 768px) {
+    width: 100%;
+    margin-left: 0;
+  } */
+`;
+
+export const FormRow = styled.div`
+  margin-bottom: 1.7rem;
 
   label {
     margin-right: 1rem;
+  }
+
+  select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
   }
 `;
 
@@ -132,11 +184,12 @@ export const RemoveButton = styled(ModalButton)`
 export const StyledCartIcon = styled.div`
   position: relative;
   cursor: pointer;
-  margin-right: 10px;
+  margin-right: 30px;
 
   .cart-icon {
-    height: 30px;
-    width: 30px;
+    height: 28px;
+    width: 28px;
+    margin-top: 10px;
     transition: transform 0.3s ease-in-out;
 
     &:hover {
@@ -144,19 +197,23 @@ export const StyledCartIcon = styled.div`
     }
   }
 
-  .cart-count {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    background-color: #3498db;
-    color: #fff;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  @media (max-width: 768px) {
+    margin-right: 10px;
   }
+`;
+
+export const CartCount = styled.span`
+  position: absolute;
+  top: 0;
+  right: -10px;
+  background-color: #3498db;
+  color: #fff;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const CloseModalButton = styled.button`

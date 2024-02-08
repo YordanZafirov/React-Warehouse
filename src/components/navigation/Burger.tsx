@@ -15,7 +15,7 @@ const Burger = () => {
         <div></div>
         <div></div>
       </BurgerDiv>
-      <RightNav open={open} />
+      <RightNav open={open} handleClick={handleClick}/>
     </>
   );
 };

@@ -10,11 +10,12 @@ export const NavDiv = styled.div`
   height: 4rem;
   padding: 1rem 0;
   margin-bottom: 1rem;
-  padding-right: 20px;
+  padding: 0 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 0.25rem;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   .logo {
     padding: 15px 0;
@@ -42,7 +43,7 @@ export const Ul = styled.ul<NavProps>`
     color: #000;
   }
 
-  a:hover {
+  .nav-link:hover {
     color: #999;
   }
 
@@ -50,7 +51,8 @@ export const Ul = styled.ul<NavProps>`
     flex-flow: column nowrap;
     align-items: center;
     background-color: #333;
-    
+    overflow-y: hidden;
+
     position: fixed;
     transform: ${({ open }: NavProps) =>
       open ? "translateX(0)" : "translateX(100%)"};
@@ -73,9 +75,6 @@ export const Ul = styled.ul<NavProps>`
 export const BurgerDiv = styled.div<NavProps>`
   width: 2rem;
   height: 2rem;
-  position: fixed;
-  top: 15px;
-  right: 20px;
   display: flex;
   justify-content: space-around;
   flex-flow: column nowrap;

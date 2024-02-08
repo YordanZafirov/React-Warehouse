@@ -1,6 +1,4 @@
 import { CenteredH1, StyledTable } from "../../components/table/Table.style";
-import Invoice from "../Invoice/Invoice";
-
 import useOrder from "./Order.logic";
 import useToken from "../../hooks/Token/Token.hook";
 import { Client } from "../Client/ListClients/Client.static";
@@ -10,12 +8,18 @@ import { Order } from "./Order.static";
 import { Warehouse } from "../Warehouse/WarehouseForm/Warehouse.static";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
+import Loader from "../../components/loader/Loader";
 
 const ListOrder = () => {
-  const { orders, error, deleteOrder, permanentDeleteOrder } = useOrder();
+  const { orders, error, isLoading, deleteOrder, permanentDeleteOrder } =
+    useOrder();
   const { clients } = useGetClient();
   const { warehouses } = useGetWarehouse();
   const decodedToken = useToken();
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   if (error) {
     return <p>Error fetching orders: {error.message}</p>;
@@ -60,7 +64,9 @@ const ListOrder = () => {
               <td data-label="Order ID:">{order.id}</td>
               <td data-label="Order Type:">{order.type}</td>
               <td data-label="Client:">{getClientName(order.clientId)}</td>
-              <td data-label="Warehouse:">{getWarehouseName(order.warehouseId)}</td>
+              <td data-label="Warehouse:">
+                {getWarehouseName(order.warehouseId)}
+              </td>
               <td data-label="Created at:">{order.createdAt}</td>
               {decodedToken?.role !== "VIEWER" && (
                 <>

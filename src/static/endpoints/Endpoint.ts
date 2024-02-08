@@ -7,4 +7,5 @@ export const endpoint = {
   orderDetail: "http://localhost:3000/order-details",
   client: "http://localhost:3000/client",
   invoice: "http://localhost:3000/invoice",
+  report: "http://localhost:3000/report",
 };

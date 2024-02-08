@@ -3,10 +3,13 @@ import { useCart } from "../../context/CartContext";
 import {
   ClearButton,
   FormRow,
+  InputGroup,
   ModalButton,
   ModalButtonDiv,
   ModalForm,
   NoItemsParagraph,
+  ProductItem,
+  ProductSection,
   RemoveButton,
 } from "./Cart.style";
 import { endpoint } from "../../static/endpoints/Endpoint";
@@ -198,7 +201,7 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
       ) : (
         <ModalForm title="Cart" onSubmit={handleSubmit}>
           <FormRow>
-            <label htmlFor="order-type">Order Type:</label>
+            <label className="select-label" htmlFor="order-type">Order Type:</label>
             <select
               name="type"
               id="order-type"
@@ -212,7 +215,7 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
             </select>
           </FormRow>
           <FormRow>
-            <label htmlFor="client">Client:</label>
+            <label className="select-label" htmlFor="client">Client:</label>
             <select
               name="clientId"
               id="client"
@@ -234,7 +237,7 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
             </select>
           </FormRow>
           <FormRow>
-            <label htmlFor="warehouse">Warehouse:</label>
+            <label className="select-label" htmlFor="warehouse">Warehouse:</label>
             <select
               name="warehouseId"
               id="warehouse"
@@ -267,21 +270,20 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
           </FormRow>
 
           {products.length > 0 && ( // Check if there are products before rendering
-            <>
+            <ProductSection>
               <h2>Product Information:</h2>
               <ul>
                 {products.map((product) => (
                   <li key={product.id}>
-                    <div className="product-item">
-                      <span className="product-name">{`Product Name: ${product.name}`}</span>
-                      <div className="input-group">
-                        <label htmlFor={`unitPrice_${product.id}`}>
+                    <ProductItem>
+                      <div className="product-name">{`Product Name: ${product.name}`}</div>
+                      <InputGroup>
+                        <label className="input-label" htmlFor={`unitPrice_${product.id}`}>
                           Unit Price:
                         </label>
                         <input
                           type="number"
                           id={`unitPrice_${product.id}`}
-                          className="input-field"
                           name="unitPrice"
                           value={product.unitPrice || ""}
                           onChange={(e) =>
@@ -292,15 +294,14 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
                             )
                           }
                         />
-                      </div>
-                      <div className="input-group">
+                      </InputGroup>
+                      <InputGroup>
                         <label htmlFor={`quantity_${product.id}`}>
                           Quantity:
                         </label>
                         <input
                           type="number"
                           id={`quantity_${product.id}`}
-                          className="input-field"
                           name="quantity"
                           value={product.quantity || ""}
                           onChange={(e) =>
@@ -311,7 +312,7 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
                             )
                           }
                         />
-                      </div>
+                      </InputGroup>
                       <RemoveButton
                         type="button"
                         className="remove"
@@ -319,11 +320,11 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
                       >
                         X
                       </RemoveButton>
-                    </div>
+                    </ProductItem>
                   </li>
                 ))}
               </ul>
-            </>
+            </ProductSection>
           )}
           <ModalButtonDiv>
             <ModalButton>Submit</ModalButton>

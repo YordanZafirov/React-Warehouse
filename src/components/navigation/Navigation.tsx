@@ -5,6 +5,7 @@ const Navigation = () => {
   return (
     <NavDiv>
       <div className="logo">Logo</div>
+      <div style={{flex: 1}}></div>
       <Burger />
     </NavDiv>
   );
