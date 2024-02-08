@@ -37,16 +37,14 @@ const StyledButton = styled.button`
     background-color: #228be6;
   }
 
+  @media (max-width: 1200px) {
+    width: 50%;
+  }
+
   @media (max-width: 768px) {
     width: 50%;
     font-size: 1rem;
   }
-
-  @media (max-width: 500px) {
-    width: 80%;
-  }
-
-
 `;
 
 interface ButtonProps {

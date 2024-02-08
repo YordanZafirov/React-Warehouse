@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { endpoint } from "../../../static/endpoints/Endpoint";
-import { useNavigate } from "react-router-dom";
 
 const useProductForm = () => {
+  // The state is initialized with an empty string for all fields
   const [product, setProduct] = useState({
     name: "",
     unitType: "kg",
@@ -11,8 +11,7 @@ const useProductForm = () => {
     success: false,
   });
 
-  const navigate = useNavigate();
-
+  // The useEffect hook is used to clear the error message when the component is mounted
   useEffect(() => {
     setProduct((prevValues) => ({
       ...prevValues,
@@ -20,6 +19,7 @@ const useProductForm = () => {
     }));
   }, []);
 
+  // The handleChange function is used to update the state when the input fields change
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -30,6 +30,7 @@ const useProductForm = () => {
     }));
   };
 
+  // The clearInputs function is used to clear the input fields after the form is submitted
   const clearInputs = () => {
     setProduct({
       name: "",
@@ -40,11 +41,13 @@ const useProductForm = () => {
     });
   };
 
+  // The handleSubmit function is used to submit the form
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const token = localStorage.getItem("accessToken");
 
+    // The validateForm function is used to validate the input fields
     if (!product.name.trim()) {
       setProduct((prevValues) => ({
         ...prevValues,
@@ -53,12 +56,14 @@ const useProductForm = () => {
       return;
     }
 
+    // The data object is used to store the input fields
     const data = {
       name: product.name,
       unitType: product.unitType,
       type: product.type,
     };
 
+    // The fetch function is used to make a POST request to the server
     fetch(endpoint.product, {
       method: "POST",
       headers: {

@@ -9,6 +9,7 @@ const useDeleteClient = () => {
   const deleteWarehouseMutation = useMutation(deleteClient);
   const permanentDeleteClientMutation = useMutation(permanentDeleteClient);
 
+  // The deleteClient function is used to soft delete a client
   async function deleteClient(id: string) {
     try {
       const token = localStorage.getItem("accessToken");
@@ -36,6 +37,7 @@ const useDeleteClient = () => {
     }
   }
 
+  // The permanentDeleteClient function is used to permanently delete a client
   async function permanentDeleteClient(id: string) {
     try {
       const token = localStorage.getItem("accessToken");

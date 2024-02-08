@@ -25,11 +25,13 @@ const ListOrder = () => {
     return <p>Error fetching orders: {error.message}</p>;
   }
 
+  // Function to get client name
   const getClientName = (clientId: string) => {
     const client = clients?.find((client: Client) => client.id === clientId);
     return client ? client.accountablePerson : "Unknown Client";
   };
 
+  // Function to get warehouse name
   const getWarehouseName = (warehouseId: string) => {
     const warehouse = warehouses?.find(
       (warehouse: Warehouse) => warehouse.id === warehouseId

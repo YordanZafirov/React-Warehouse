@@ -11,9 +11,10 @@ const useGetOrderDetails = () => {
     error,
     refetch,
   } = useQuery(["orderDetails", id], () => (id ? getOrderDetails(id) : null), {
-    enabled: !!id,
+    enabled: !!id, // The query is only enabled when the id is available
   });
 
+  // The getOrderDetails function is used to fetch the details of an order
   async function getOrderDetails(id: string) {
     try {
       const token = localStorage.getItem("accessToken");

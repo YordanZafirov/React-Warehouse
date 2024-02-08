@@ -28,6 +28,7 @@ const useReports = () => {
     isLoadingClientWithMostOrders ||
     isLoadingHighestStockPerWarehouse;
 
+  // The getBestSellingProducts function is used to fetch the best selling products
   async function getBestSellingProducts() {
     try {
       const token = localStorage.getItem("accessToken");
@@ -56,6 +57,7 @@ const useReports = () => {
     }
   }
 
+  // The getClientWithMostOrders function is used to fetch the client with the most orders
   async function getClientWithMostOrders() {
     try {
       const token = localStorage.getItem("accessToken");
@@ -84,6 +86,7 @@ const useReports = () => {
     }
   }
 
+  // The getHighestStockPerWarehouse function is used to fetch the highest stock per warehouse
   async function getHighestStockPerWarehouse() {
     try {
       const token = localStorage.getItem("accessToken");

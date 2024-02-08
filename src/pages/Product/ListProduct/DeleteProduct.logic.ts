@@ -8,6 +8,7 @@ const useDeleteProduct = () => {
   const deleteProductMutation = useMutation(deleteProduct);
   const permanentDeleteProductMutation = useMutation(permanentDeleteProduct);
 
+  // The deleteProduct function is used to soft delete a product
   async function deleteProduct(id: string) {
     try {
       const token = localStorage.getItem("accessToken");
@@ -35,6 +36,7 @@ const useDeleteProduct = () => {
     }
   }
 
+  // The permanentDeleteProduct function is used to permanently delete a product
   async function permanentDeleteProduct(id: string) {
     try {
       const token = localStorage.getItem("accessToken");

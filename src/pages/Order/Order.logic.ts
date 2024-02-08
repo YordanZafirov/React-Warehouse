@@ -13,6 +13,7 @@ const useOrder = () => {
   const deleteOrderMutation = useMutation(deleteOrder);
   const permanentDeleteOrderMutation = useMutation(permanentDeleteOrder);
 
+  // The getOrder function is used to fetch all orders
   async function getOrder() {
     try {
       const token = localStorage.getItem("accessToken");
@@ -46,6 +47,7 @@ const useOrder = () => {
     }
   }
 
+  // The deleteOrder function is used to soft delete an order
   async function deleteOrder(id: string) {
     try {
       const token = localStorage.getItem("accessToken");
@@ -73,6 +75,7 @@ const useOrder = () => {
     }
   }
 
+  // The permanentDeleteOrder function is used to permanently delete an order
   async function permanentDeleteOrder(id: string) {
     try {
       const token = localStorage.getItem("accessToken");

@@ -21,6 +21,7 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
   const errRef = useRef<HTMLParagraphElement>(null);
   const navigate = useNavigate();
 
+  // State for form values
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
@@ -32,6 +33,7 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
     confirmPasswordFocus: false,
   });
 
+  // Handle input change
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues((prevValues) => ({
@@ -41,10 +43,12 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
     }));
   };
 
+  // Focus on email input on mount
   useEffect(() => {
     emailRef.current?.focus();
   }, []);
 
+  // Clear error message on input change
   useEffect(() => {
     setFormValues((prevValues) => ({
       ...prevValues,
@@ -52,6 +56,8 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
     }));
   }, [formValues.email, formValues.password, formValues.confirmPassword]);
 
+
+  // Validate form
   const validateForm = (): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -81,6 +87,7 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
     }
   };
 
+  // Handle form submit
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -95,6 +102,7 @@ const AuthForm: React.FC<AuthProps> = ({ formType }) => {
 
     const url = formType === "login" ? endpoint.login : endpoint.register;
 
+    // Send request to server for login or register
     fetch(url, {
       method: "POST",
       headers: {

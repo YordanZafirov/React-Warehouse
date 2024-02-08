@@ -30,6 +30,18 @@ export const StyledForm = styled.form`
     font-size: 1.2rem;
   }
 
+  @media (max-width: 1200px) {
+    width: 80%;
+  
+    input {
+      width: 50%;
+    }
+
+    select {
+      width: 50%;
+    }
+  }
+
   @media(max-width: 768px) {
     width: 80%;
 

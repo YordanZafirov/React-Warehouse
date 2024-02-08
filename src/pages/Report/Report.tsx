@@ -35,8 +35,8 @@ const Report = () => {
               </tr>
             </thead>
             <tbody>
-              {bestSellingProduct?.map((product: ProductReport) => (
-                <tr key={product.id}>
+              {bestSellingProduct?.map((product: ProductReport, index: number) => (
+                <tr key={`${product.id}-${index}`}>
                   <td>{product.product_name}</td>
                   <td>{product.best_selling}</td>
                 </tr>
@@ -55,8 +55,8 @@ const Report = () => {
               </tr>
             </thead>
             <tbody>
-              {clientWithMostOrders?.map((clients: ClientReport) => (
-                <tr key={clients.id}>
+              {clientWithMostOrders?.map((clients: ClientReport, index: number) => (
+                <tr key={`${clients.id}-${index}`}>
                   <td>{clients.accountable_person}</td>
                   <td>{clients.orders}</td>
                 </tr>
@@ -76,8 +76,8 @@ const Report = () => {
               </tr>
             </thead>
             <tbody>
-              {highestStockPerWarehouse?.map((stock: Stock) => (
-                <tr key={stock.id}>
+              {highestStockPerWarehouse?.map((stock: Stock, index: number) => (
+                <tr key={`${stock.id}-${index}`}>
                   <td>{stock.warehouse_name}</td>
                   <td>{stock.product_name}</td>
                   <td>{stock.total_quantity}</td>

@@ -64,7 +64,7 @@ export const StyledTable = styled.table`
     background-color: #f2f2f2;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1200px) {
     th {
       display: none;
     }

@@ -43,6 +43,7 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
   const { clients } = useGetClient();
   const { warehouses } = useGetWarehouse();
 
+  // State for order details
   const [order, setOrder] = useState<Order>({
     type: "",
     clientId: "",
@@ -60,6 +61,7 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
 
   const token = localStorage.getItem("accessToken");
 
+  // Fetch product details
   const fetchProducts = async () => {
     const productDetailsPromises = items.map(async (item) => {
       const res = await fetch(endpoint.product + "/" + item.id, {
@@ -70,6 +72,8 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
         },
       });
       const data = await res.json();
+
+      // Create product details object
       const productDetails: Product = {
         id: item.id,
         type: data.type,
@@ -85,6 +89,7 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
     setProducts(productDetails);
   };
 
+  // Handle change in order details
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setOrder((prevOrder) => ({
@@ -93,6 +98,7 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
     }));
   };
 
+  // Handle change in product details
   const handleProductChange = (
     productId: string,
     field: string,
@@ -119,6 +125,7 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
     fetchProducts();
   }, [items]);
 
+  // Set default order details
   useEffect(() => {
     if (clients && clients.length > 0 && warehouses && warehouses.length > 0) {
       setOrder((prevOrder) => ({
@@ -131,6 +138,7 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
     }
   }, [clients, warehouses]);
 
+  // Filter warehouses based on product type
   useEffect(() => {
     if (products.length > 0) {
       const filteredWarehouses = warehouses?.filter(
@@ -140,9 +148,12 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
     }
   }, [products, warehouses]);
 
+  // Submit order
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { type, clientId, warehouseId, outgoingWarehouse } = order;
+
+    // Create product details object
     const product = products.map((product) => ({
       productId: product.id,
       quantity: product.quantity,
@@ -156,6 +167,7 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
       product,
     };
 
+    // Add outgoing warehouse if order type is transfer
     if (outgoingWarehouse) {
       Object.assign(requestBody, { outgoingWarehouse });
     }

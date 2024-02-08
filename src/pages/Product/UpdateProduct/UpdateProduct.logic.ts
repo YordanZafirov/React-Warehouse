@@ -22,6 +22,7 @@ const useUpdateProduct = () => {
     enabled: !!id, // Only enable the query if id is truthy
   });
 
+  // The updateProductMutation is used to update a product
   const updateProductMutation = useMutation(
     (updatedProduct: {}) =>
       id ? updateProduct(id, updatedProduct) : Promise.resolve(null),
@@ -34,6 +35,7 @@ const useUpdateProduct = () => {
     }
   );
 
+  // The getProductId function is used to fetch a product by its id
   const getProductId = async (id: string) => {
     try {
       const token = localStorage.getItem("accessToken");
@@ -61,6 +63,7 @@ const useUpdateProduct = () => {
     }
   };
 
+  // The updateProduct function is used to update a product
   const updateProduct = async (id: string, updatedProduct: {}) => {
     try {
       const token = localStorage.getItem("accessToken");

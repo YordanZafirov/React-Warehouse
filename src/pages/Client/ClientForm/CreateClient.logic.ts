@@ -3,6 +3,7 @@ import { endpoint } from "../../../static/endpoints/Endpoint";
 import { token } from "../../../static/token";
 
 const useClientForm = () => {
+  // The state is initialized with an empty string for all fields
   const [client, setClient] = useState({
     accountablePerson: "",
     userName: "",
@@ -12,6 +13,7 @@ const useClientForm = () => {
     success: false,
   });
 
+  // The useEffect hook is used to clear the error message when the component is mounted
   useEffect(() => {
     setClient((prevValues) => ({
       ...prevValues,
@@ -19,6 +21,7 @@ const useClientForm = () => {
     }));
   }, []);
 
+  // The handleChange function is used to update the state when the input fields change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setClient((prevValues) => ({
@@ -27,6 +30,7 @@ const useClientForm = () => {
     }));
   };
 
+  // The clearInputs function is used to clear the input fields after the form is submitted
   const clearInputs = () => {
     setClient({
       accountablePerson: "",
@@ -38,6 +42,7 @@ const useClientForm = () => {
     });
   };
 
+  // The validateForm function is used to validate the input fields
   const validateForm = (): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (
@@ -62,11 +67,13 @@ const useClientForm = () => {
     }
   };
 
+  // The handleSubmit function is used to submit the form
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!validateForm()) return;
 
+    // The data object is created from the state
     const data = {
       accountablePerson: client.accountablePerson,
       userName: client.userName,
@@ -74,6 +81,7 @@ const useClientForm = () => {
       address: client.address,
     };
 
+    // The fetch API is used to make a POST request to the server
     fetch(endpoint.client, {
       method: "POST",
       headers: {

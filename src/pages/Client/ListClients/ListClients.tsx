@@ -36,7 +36,7 @@ const ListClients = () => {
           {clients?.map((client: Client) => (
             <tr key={client.id}>
               <td data-label="Accountble Person:">{client.accountablePerson}</td>
-              <td data-label="Useer Name:">{client.userName}</td>
+              <td data-label="User Name:">{client.userName}</td>
               <td data-label="Email:">{client.email}</td>
               <td data-label="Address:">{client.address}</td>
               <td data-label="Created at:">{client.createdAt.toLocaleString()}</td>

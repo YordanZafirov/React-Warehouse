@@ -85,7 +85,6 @@ const Invoice = () => {
             }
           })}
           <tr>
-            {/* <div> {totalPrice}</div> */}
             <td></td>
             <td></td>
             <td></td>
