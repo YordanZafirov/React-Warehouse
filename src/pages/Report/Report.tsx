@@ -20,6 +20,7 @@ const Report = () => {
   if (error) {
     return <p>Error: {error.message}</p>;
   }
+  
   return (
     <div>
       <CenteredH1>Reports</CenteredH1>
@@ -35,12 +36,14 @@ const Report = () => {
               </tr>
             </thead>
             <tbody>
-              {bestSellingProduct?.map((product: ProductReport, index: number) => (
-                <tr key={`${product.id}-${index}`}>
-                  <td>{product.product_name}</td>
-                  <td>{product.best_selling}</td>
-                </tr>
-              ))}
+              {bestSellingProduct?.map(
+                (product: ProductReport, index: number) => (
+                  <tr key={`${product.id}-${index}`}>
+                    <td data-label="Product Name:">{product.product_name}</td>
+                    <td data-label="Quantity Sold:">{product.best_selling}</td>
+                  </tr>
+                )
+              )}
             </tbody>
           </StyledTable>
         </div>
@@ -55,12 +58,14 @@ const Report = () => {
               </tr>
             </thead>
             <tbody>
-              {clientWithMostOrders?.map((clients: ClientReport, index: number) => (
-                <tr key={`${clients.id}-${index}`}>
-                  <td>{clients.accountable_person}</td>
-                  <td>{clients.orders}</td>
-                </tr>
-              ))}
+              {clientWithMostOrders?.map(
+                (clients: ClientReport, index: number) => (
+                  <tr key={`${clients.id}-${index}`}>
+                    <td data-label="Client Name:">{clients.accountable_person}</td>
+                    <td data-label="Number of Orders:">{clients.orders}</td>
+                  </tr>
+                )
+              )}
             </tbody>
           </StyledTable>
         </div>
@@ -78,9 +83,9 @@ const Report = () => {
             <tbody>
               {highestStockPerWarehouse?.map((stock: Stock, index: number) => (
                 <tr key={`${stock.id}-${index}`}>
-                  <td>{stock.warehouse_name}</td>
-                  <td>{stock.product_name}</td>
-                  <td>{stock.total_quantity}</td>
+                  <td data-label="Warehouse Name:">{stock.warehouse_name}</td>
+                  <td data-label="Product Name:">{stock.product_name}</td>
+                  <td data-label="Quantity:">{stock.max_quantity}</td>
                 </tr>
               ))}
             </tbody>

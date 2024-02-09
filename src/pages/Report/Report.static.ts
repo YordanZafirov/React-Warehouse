@@ -14,5 +14,5 @@ export interface Stock {
   id: number;
   warehouse_name: string;
   product_name: string;
-  total_quantity: string;
+  max_quantity: string;
 }

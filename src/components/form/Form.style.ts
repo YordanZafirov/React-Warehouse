@@ -32,6 +32,7 @@ export const StyledForm = styled.form`
 
   @media (max-width: 1200px) {
     width: 80%;
+    margin-bottom: 2rem;
   
     input {
       width: 50%;
