@@ -11,6 +11,7 @@ width: 40%;
 const StyledButton = styled.button`
   padding: 0.5rem;
   margin-top: 1rem;
+  text-align: center;
   width: 30%;
   font-size: 1.2rem;
   border: 1px solid #ccc;
@@ -43,7 +44,7 @@ const StyledButton = styled.button`
 
   @media (max-width: 768px) {
     width: 50%;
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 `;
 
