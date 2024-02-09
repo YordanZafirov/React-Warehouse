@@ -1,20 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-import { route } from "../../static/router/Routes";
+import { route } from "../../../static/router/Routes";
 
-import { Ul } from "./Navigation.style";
+import { Ul } from "./RightNav.style";
 import {
   PopoverContainer,
   PopoverContent,
   PopoverLink,
   ProfileSpan,
 } from "./Popover.style";
-import { useAuth } from "../../context/AuthContext";
-import CartIcon from "../../pages/Cart/CartIcon/CartIcon";
-import CartModal, { ModalInstance } from "../../pages/Cart/CartModal/CartModal";
-import useToken from "../../hooks/Token/Token.hook";
+import { useAuth } from "../../../context/AuthContext";
+import CartIcon from "../../../pages/Cart/CartIcon/CartIcon";
+import CartModal from "../../../pages/Cart/CartModal/CartModal";
+import { ModalInstance } from "../../../pages/Cart/CartModal/CartModal.static";
+import useToken from "../../../hooks/Token/Token.hook";
+import useRightNav from "./RightNav.logic";
 
 interface NavProps {
   open: boolean;
@@ -27,16 +29,13 @@ const StyledProfile = styled.div`
 
 const RightNav: React.FC<NavProps> = ({ open, handleClick }) => {
   const { isAuthenticated, logout } = useAuth();
-  const [showPopover, setShowPopover] = useState(false);
   const decodedToken = useToken();
-
-  const handleProfileClick = () => {
-    setShowPopover(!showPopover);
-  };
-
-  const handlePopoverClose = () => {
-    setShowPopover(false);
-  };
+  const {
+    showPopover,
+    handleProfileClick,
+    handlePopoverClose,
+    handleCloseNav,
+  } = useRightNav(handleClick);
 
   const cartModalRef = useRef<ModalInstance | null>(null);
 
@@ -45,26 +44,6 @@ const RightNav: React.FC<NavProps> = ({ open, handleClick }) => {
       cartModalRef.current.open();
     }
   };
-
-  const handleCloseNav = () => {
-    handleClick();
-    handlePopoverClose();
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (showPopover && !target.closest("#popover-content")) {
-        handlePopoverClose();
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showPopover]);
 
   return (
     <nav>
