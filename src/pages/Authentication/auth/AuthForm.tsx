@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState, useRef, useEffect } from "react";
+import {  useRef, useEffect } from "react";
 import {
   Alert,
   StyledAuth,
@@ -6,157 +6,26 @@ import {
 } from "../../../components/alert/Alert.style";
 import Form from "../../../components/form/Form";
 import Button from "../../../components/button/Button";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../context/AuthContext";
-import { route } from "../../../static/router/Routes";
-import { endpoint } from "../../../static/endpoints/Endpoint";
 
-interface AuthProps {
-  formType: "register" | "login";
-}
+import { route } from "../../../static/router/Routes";
+import { AuthProps } from "./Auth.static";
+import useAuthForm from "./Auth.logic";
 
 const AuthForm: React.FC<AuthProps> = ({ formType }) => {
-  const { login } = useAuth();
+  const {
+    formValues,
+    setFormValues,
+    handleFormSubmit,
+    handleChange,
+  } = useAuthForm(formType);
   const emailRef = useRef<HTMLInputElement>(null);
   const errRef = useRef<HTMLParagraphElement>(null);
-  const navigate = useNavigate();
-
-  // State for form values
-  const [formValues, setFormValues] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-    errMessage: "",
-    success: false,
-    emailFocus: false,
-    passwordFocus: false,
-    confirmPasswordFocus: false,
-  });
-
-  // Handle input change
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-      errMessage: "",
-    }));
-  };
-
+  
   // Focus on email input on mount
   useEffect(() => {
     emailRef.current?.focus();
   }, []);
 
-  // Clear error message on input change
-  useEffect(() => {
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      errMessage: "",
-    }));
-  }, [formValues.email, formValues.password, formValues.confirmPassword]);
-
-
-  // Validate form
-  const validateForm = (): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailRegex.test(formValues.email)) {
-      setFormValues((prevValues) => ({
-        ...prevValues,
-        errMessage: "Invalid email",
-      }));
-      return false;
-    } else if (formValues.password.length < 5) {
-      setFormValues((prevValues) => ({
-        ...prevValues,
-        errMessage: "Password must be at least 6 characters long",
-      }));
-      return false;
-    } else if (
-      formType === "register" &&
-      formValues.password !== formValues.confirmPassword
-    ) {
-      setFormValues((prevValues) => ({
-        ...prevValues,
-        errMessage: "Passwords do not match",
-      }));
-      return false;
-    } else {
-      return true;
-    }
-  };
-
-  // Handle form submit
-  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    const data = {
-      email: formValues.email,
-      password: formValues.password,
-    };
-
-    const url = formType === "login" ? endpoint.login : endpoint.register;
-
-    // Send request to server for login or register
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          setFormValues((prevValues) => ({
-            ...prevValues,
-            errMessage: "Invalid credentials. Please try again.",
-          }));
-        }
-
-        const response = await res.json();
-        if (response.error) {
-          setFormValues((prevValues) => ({
-            ...prevValues,
-            errMessage: response.error,
-          }));
-        }
-
-        const accessToken = response.access_token;
-
-        if (accessToken) {
-          localStorage.setItem("accessToken", accessToken);
-        }
-      })
-      .then(() => {
-        setFormValues((prevValues) => ({
-          ...prevValues,
-          success: true,
-        }));
-
-        setTimeout(() => {
-          setFormValues((prevValues) => ({
-            ...prevValues,
-            success: false,
-          }));
-
-          navigate(formType === "register" ? route.login : route.client);
-        }, 3000);
-
-        login(localStorage.getItem("accessToken") || "");
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-        setFormValues((prevValues) => ({
-          ...prevValues,
-          errMessage: "An error occurred during the request.",
-        }));
-      });
-  };
 
   return (
     <>

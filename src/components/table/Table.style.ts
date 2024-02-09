@@ -8,6 +8,7 @@ export const CenteredH1 = styled.h1`
 export const StyledTable = styled.table`
   width: 90%;
   margin: 10px auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
   thead {
     background-color: #d7d7d7;
