@@ -1,11 +1,9 @@
 import { forwardRef, useRef, useImperativeHandle } from "react";
-import Cart from "./Cart";
-import { CloseModalButton, Modal } from "./Cart.style";
+import Cart from "../Cart";
+import { CloseModalButton, Modal } from "./CartModal.style";
+import { ModalInstance } from "./CartModal.static";
 
-export interface ModalInstance {
-  open: () => void;
-  close: () => void;
-}
+
 
 const CartModal = forwardRef<ModalInstance>((props, ref) => {
   const dialog = useRef<HTMLDialogElement>(null);

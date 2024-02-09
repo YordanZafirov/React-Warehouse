@@ -12,8 +12,8 @@ import {
   ProfileSpan,
 } from "./Popover.style";
 import { useAuth } from "../../context/AuthContext";
-import CartIcon from "../../pages/Cart/CartIcon";
-import CartModal, { ModalInstance } from "../../pages/Cart/CartModal";
+import CartIcon from "../../pages/Cart/CartIcon/CartIcon";
+import CartModal, { ModalInstance } from "../../pages/Cart/CartModal/CartModal";
 import useToken from "../../hooks/Token/Token.hook";
 
 interface NavProps {
