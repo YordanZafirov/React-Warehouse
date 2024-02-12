@@ -52,9 +52,9 @@ const ListOrder = () => {
             <th>Client</th>
             <th>Warehouse</th>
             <th>CreatedAt</th>
+            <th>Invoices</th>
             {decodedToken?.role !== "VIEWER" && (
               <>
-                <th>Invoices</th>
                 <th>Actions</th>
               </>
             )}
@@ -70,16 +70,16 @@ const ListOrder = () => {
                 {getWarehouseName(order.warehouseId)}
               </td>
               <td data-label="Created at:">{order.createdAt}</td>
+              {order.type === "stock picking" && (
+                <div className="button-container">
+                  <Link className="update" to={`/invoice/${order.id}`}>
+                    Invoice
+                  </Link>
+                </div>
+              )}
               {decodedToken?.role !== "VIEWER" && (
                 <>
                   <td>
-                    {order.type === "stock picking" && (
-                      <div className="button-container">
-                        <Link className="update" to={`/invoice/${order.id}`}>
-                          Invoice
-                        </Link>
-                      </div>
-                    )}
                   </td>
                   <td>
                     <button onClick={() => deleteOrder(order.id)}>
