@@ -94,16 +94,20 @@ const useAuthForm = (formType: "register" | "login") => {
         if (!res.ok) {
           setFormValues((prevValues) => ({
             ...prevValues,
+            success: false,
             errMessage: "Invalid credentials. Please try again.",
           }));
+          return;
         }
 
         const response = await res.json();
         if (response.error) {
           setFormValues((prevValues) => ({
             ...prevValues,
+            success: false,
             errMessage: response.error,
           }));
+          return;
         }
 
         const accessToken = response.access_token;
@@ -111,8 +115,7 @@ const useAuthForm = (formType: "register" | "login") => {
         if (accessToken) {
           localStorage.setItem("accessToken", accessToken);
         }
-      })
-      .then(() => {
+
         setFormValues((prevValues) => ({
           ...prevValues,
           success: true,
@@ -130,10 +133,12 @@ const useAuthForm = (formType: "register" | "login") => {
         login(localStorage.getItem("accessToken") || "");
       })
       .catch((error) => {
-        console.error("Fetch error:", error);
+        // Handle form submission error
+        console.error("Form submission error:", error);
         setFormValues((prevValues) => ({
           ...prevValues,
           errMessage: "An error occurred during the request.",
+          success: false,
         }));
       });
   };
