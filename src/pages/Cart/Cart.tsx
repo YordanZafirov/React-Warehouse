@@ -37,7 +37,7 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
 
   useEffect(() => {
     fetchProducts();
-  }, [items]);
+  }, [fetchProducts]);
 
   // Set default order details
   useEffect(() => {
@@ -50,7 +50,7 @@ const Cart: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
         outgoingWarehouse: prevOrder.outgoingWarehouse || "",
       }));
     }
-  }, [clients, warehouses]);
+  }, [clients, warehouses, setOrder]);
 
   // Filter warehouses based on product type
   useEffect(() => {
